@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile rootProject.ext.dependencies["support-v4"]
+    compile rootProject.ext.dependencies["appcompat-v7"]
+    compile rootProject.ext.dependencies["design"]
+    compile rootProject.ext.dependencies["recyclerview"]
+    compile rootProject.ext.dependencies["cardview"]
+    compile rootProject.ext.dependencies["rxandroid"]
+    compile rootProject.ext.dependencies["rxbinding"]
+    compile rootProject.ext.dependencies["rxbinding-support-v4"]
+    compile rootProject.ext.dependencies["rxbinding-appcompat-v7"]
+    compile rootProject.ext.dependencies["rxbinding-design"]
+    compile rootProject.ext.dependencies["rxbinding-recyclerview-v7"]
+    compile rootProject.ext.dependencies["stream"]
+    compile rootProject.ext.dependencies["retrofit"]
+    compile rootProject.ext.dependencies["adapter-rxjava"]
+    compile rootProject.ext.dependencies["okhttp3-logging-interceptor"]
+    compile rootProject.ext.dependencies["fresco"]
+    compile rootProject.ext.dependencies["converter-gson"]
+    compile rootProject.ext.dependencies["systembar"]
+    compile rootProject.ext.dependencies["meterial_dialog"]
+
+    compile 'org.glassfish:javax.annotation:10.0-b28'
+}
