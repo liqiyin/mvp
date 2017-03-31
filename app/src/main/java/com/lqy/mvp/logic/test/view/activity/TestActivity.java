@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.lqy.mvp.R;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -39,8 +39,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     Unbinder unbinder;
     @BindView(R.id.prv_main)
     PullRefreshView pullRefreshView;
-    @BindView(R.id.btn)
-    Button btn;
 
     List<InTheatersResp.SubjectsBean> dataList;
     TestAdapter adapter;
@@ -89,12 +87,18 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         });
 
         pullRefreshView.setAdapter(adapter);
+    }
 
-        btn.setOnClickListener(v -> {
-            if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_CONTACTS, 4)) {
-                MPermissions.requestPermissions(mActivity, 4, Manifest.permission.READ_CONTACTS);
-            }
-        });
+    @OnClick(R.id.btn)
+    void onPermissionClick() {
+        if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_CONTACTS, 4)) {
+            MPermissions.requestPermissions(mActivity, 4, Manifest.permission.READ_CONTACTS);
+        }
+    }
+
+    @OnClick(R.id.btn_patch)
+    void onPatchClick() {
+        showToast("热修复");
     }
 
     @Override
@@ -137,7 +141,8 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     public void onPermissionSuccess() {
         showToast("授权");
     }
-//
+
+    //
     //授权失败
     @PermissionDenied(4)
     public void onPermissionFail() {

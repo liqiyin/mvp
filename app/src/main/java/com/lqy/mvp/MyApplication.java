@@ -13,7 +13,11 @@ import android.support.multidex.MultiDex;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lqy.mvp.api.InitialIntentService;
 import com.lqy.mvp.library.activity.BaseActivity;
+import com.lqy.mvp.util.SystemUtils;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.BuglyStrategy;
+import com.tencent.bugly.beta.Beta;
 
 public class MyApplication extends Application {
 
@@ -31,6 +35,7 @@ public class MyApplication extends Application {
         initLeakCanary();
         initFresco();
         initApiService();
+        initBugly();
     }
 
     /**
@@ -39,9 +44,9 @@ public class MyApplication extends Application {
     void initStrictMode() {
         if (BuildConfig.DEBUG) {
             //检查主线程耗时
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyDeath().build());
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
             //检查内存泄漏
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyDeath().build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
     }
 
@@ -73,11 +78,27 @@ public class MyApplication extends Application {
     }
 
     /**
+     * 初始化bugly 涉及到文件读写操作
+     */
+    void initBugly() {
+        //bugly 更新检测和bug收集
+        BuglyStrategy strategy = new BuglyStrategy();
+        strategy.setAppChannel(SystemUtils.getQudao(getApplicationContext()));
+        Beta.autoInit = true;
+        Beta.autoCheckUpgrade = true;
+        Beta.storageDir = getApplicationContext().getExternalCacheDir();
+        Bugly.setIsDevelopmentDevice(getApplicationContext(), BuildConfig.DEBUG);//是否是开发设备
+        Bugly.init(getApplicationContext(), Constants.BUGLY_APPKEY, BuildConfig.DEBUG, strategy);
+    }
+
+    /**
      * 分包支持
      */
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
+        MultiDex.install(base);
+        // 安装tinker
+        Beta.installTinker();
     }
 
     /**

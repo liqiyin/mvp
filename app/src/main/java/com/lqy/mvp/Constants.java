@@ -6,5 +6,5 @@ package com.lqy.mvp;
  */
 
 public interface Constants {
-    String BUGLY_APPKEY = "2bba6be2ed";//腾讯bugly appkey
+    String BUGLY_APPKEY = "c4612812a8";//腾讯bugly appkey
 }

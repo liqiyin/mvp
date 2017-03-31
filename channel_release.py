@@ -4,40 +4,51 @@ import shutil
 import os
 import sys
 
+#版本号文件夹名
+VERSION_NAME = '1.0.0'
+
+VERSION_PATH = './release_apks/' + VERSION_NAME
+
+#将编译apk文件夹备份到版本号对应的文件夹下
+COPY_APK_PATH_DIR = VERSION_PATH + '/apk/'
+
+#渠道列表文件
 FLAVOR_FILE = 'all_channels.txt'
 
 #zipalign路径
 ZIPALIGN_PATH = '~/Library/Android/sdk/build-tools/25.0.2/zipalign'
 
 #apk编译路径
-BUILD_PATH = './app/build/outputs/apk/'
+BUILD_PATH = './app/build/outputs/app-release.apk'
 
-#版本号文件夹
-VERSION_NAME = '1_0_0/'
-
-#将编译apk文件夹备份到版本号对应的文件夹下
-COPY_APK_PATH_DIR = './release_apks/' + VERSION_NAME + 'apk/'
+#备份apk路径(系统生成的路径)
+BAK_APK_PATH = './app/build/bakApk/'
 
 #基带apk路径
 APK_PATH = COPY_APK_PATH_DIR + 'app-release.apk'
 
 #根据基带apk进行操作生成对应渠道包
-CHANNEL_PATH = COPY_APK_PATH_DIR + 'channel/'
+CHANNEL_PATH = VERSION_PATH + '/channel/'
 
 if __name__ == '__main__':
-    if not os.path.exists(FLAVOR_FILE):
-        pass
+    if not os.path.exists(FLAVOR_FILE) or os.path.exists(VERSION_PATH):
+        sys.exit()
+    #先删除BAK_APK_PATH下的所有文件
+    if os.path.exists(BAK_APK_PATH):
+        shutil.rmtree(BAK_APK_PATH)
 
-    hasApk = os.path.exists(BUILD_PATH + 'app-release.apk')
-    if len(sys.argv) == 1 or not hasApk:
-        os.system('./gradlew assembleRelease')
+    #编译apk
+    os.system('./gradlew assembleRelease')
 
-    if not os.path.exists(COPY_APK_PATH_DIR):
-        os.makedirs(COPY_APK_PATH_DIR)
+    if os.path.exists(COPY_APK_PATH_DIR):
+        shutil.rmtree(COPY_APK_PATH_DIR)
 
-    #将编译好的apk复制到当前文件夹
-    for f in os.listdir(BUILD_PATH):
-        shutil.copy(BUILD_PATH + f, COPY_APK_PATH_DIR + f)
+    #将编译好的apk复制到release_apks/apk/中
+    for f in os.listdir(BAK_APK_PATH):
+        shutil.copytree(BAK_APK_PATH + f, COPY_APK_PATH_DIR)
+
+    #删除bak文件夹中的文件
+    shutil.rmtree(BAK_APK_PATH)
 
     emptyFile = 'xxx.txt'
     f = open(emptyFile, 'w')
