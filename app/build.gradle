@@ -27,7 +27,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("../tools/keystore")      //签名文件
+            storeFile file("../tools/keystore.jks")      //签名文件
             storePassword "111111"
             keyAlias "lqy"
             keyPassword "111111"     //签名密码

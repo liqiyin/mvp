@@ -60,9 +60,7 @@ public class MyApplication extends Application {
             public void onActivityResumed(Activity activity) {
                 if (activity instanceof BaseActivity) {
                     CurrentActivityManager.getInstance().setCurrentActivity((BaseActivity) activity);
-                    return;
                 }
-                throw new RuntimeException("The activity is not subclass of BaseActivity !");
             }
 
             @Override

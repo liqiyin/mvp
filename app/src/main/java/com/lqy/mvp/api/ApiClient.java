@@ -1,6 +1,9 @@
 package com.lqy.mvp.api;
 
 import com.lqy.mvp.BuildConfig;
+import com.lqy.mvp.api.cookie.CookieManager;
+
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -13,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * 请求服务封装
  */
 public final class ApiClient {
-
+    private final static int TIMEOUT = 5000;//设置5s超时
     private static volatile ApiService apiService;
 
     private static void init() {
@@ -43,6 +46,10 @@ public final class ApiClient {
         }
         //添加自定义拦截器 可添加头参数等 TODO
 //        builder.addInterceptor(new ApiInterceptor());
+        builder.readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .cookieJar(new CookieManager());
         OkHttpClient client = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -56,4 +63,3 @@ public final class ApiClient {
     }
 
 }
-

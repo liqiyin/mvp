@@ -43,7 +43,7 @@ public class TestPresenter implements TestContract.Presenter {
 
                 @Override
                 protected void onFail(String msg) {
-
+                    view.displayRequestContent(null);
                 }
             });
         subscriptions.add(subscription);

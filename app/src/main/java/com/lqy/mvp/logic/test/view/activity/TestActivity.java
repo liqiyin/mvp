@@ -9,13 +9,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lqy.mvp.R;
+import com.lqy.mvp.library.activity.BaseActivity;
+import com.lqy.mvp.library.widget.PullRefreshView;
 import com.lqy.mvp.logic.test.contract.TestContract;
 import com.lqy.mvp.logic.test.model.http.response.InTheatersResp;
 import com.lqy.mvp.logic.test.presenter.TestPresenter;
 import com.lqy.mvp.logic.test.view.adapter.TestAdapter;
 import com.lqy.mvp.util.ActivityUtils;
-import com.lqy.mvp.library.activity.BaseActivity;
-import com.lqy.mvp.library.widget.PullRefreshView;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
@@ -100,6 +100,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     @Override
     public void displayRequestContent(List<InTheatersResp.SubjectsBean> subjectsBeanList) {
         pullRefreshView.onRequestCompleted();
+        if (subjectsBeanList == null) return;
         if (pageStart == 0) {
             dataList.clear();
         }
