@@ -1,4 +1,7 @@
 #coding=utf-8
+#author: slam.li
+#create: 2017/3/31
+
 import zipfile
 import shutil
 import os
@@ -10,7 +13,7 @@ VERSION_NAME = '1.0.0'
 VERSION_PATH = './release_apks/' + VERSION_NAME
 
 #将编译apk文件夹备份到版本号对应的文件夹下
-COPY_APK_PATH_DIR = VERSION_PATH + '/apk/'
+COPY_APK_PATH_DIR = VERSION_PATH + '/apk_0/'
 
 #渠道列表文件
 FLAVOR_FILE = 'all_channels.txt'

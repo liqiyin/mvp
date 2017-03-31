@@ -4,14 +4,15 @@ def bakPath = file("${buildDir}/bakApk/")
 /**
  * 此处填写每次构建生成的基准包目录
  */
-def baseApkDir = "app-0331-21-08-40"
+def baseApkDir = "tempApk"
 
 /**
  * 对于插件各参数的详细解析请参考
  */
 tinkerSupport {
     // 构建基准包跟补丁包都要修改tinkerId，主要用于区分
-    tinkerId = "1.0-base"
+//    tinkerId = "0001_patch_0"
+    tinkerId = "0001_base"
 
     // 开启tinker-support插件，默认值true
     enable = true
