@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.neenbedankt.android-apt'
-apply from: 'tinker-support.gradle'
+//平常开发时注释掉这一行 否则调试的时候会在app/build/bakApk/中备份每次编译的版本 占用磁盘空间
+//打包时要打开这一行代码
+//apply from: 'tinker-support.gradle'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
