@@ -3,14 +3,17 @@ package com.lqy.mvp;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lqy.mvp.api.InitialIntentService;
 import com.lqy.mvp.library.activity.BaseActivity;
+import com.squareup.leakcanary.LeakCanary;
 
 public class MyApplication extends Application {
 
@@ -23,21 +26,58 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        myApplicationInstance = this;
+        initStrictMode();
+        initLeakCanary();
+        initFresco();
+        initApiService();
+    }
 
+    /**
+     * 初始化严格模式
+     */
+    void initStrictMode() {
         if (BuildConfig.DEBUG) {
             //检查主线程耗时
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyDeath().build());
             //检查内存泄漏
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyDeath().build());
         }
+    }
 
-        myApplicationInstance = this;
+    /**
+     * 初始化内存泄漏工具
+     */
+    void initLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+    }
+
+    /**
+     * 初始化fresco
+     */
+    void initFresco() {
         Fresco.initialize(this);
+    }
 
-        //测试中发现6.0没有耗时操作 而4.2有耗时 可能是okhttp针对不同api版本底层实现不同 为了适配 将初始化工作交由ApiIntentService初始化
-//        ApiClient.init();
+    /**
+     * 初始化耗时操作
+     */
+    void initApiService() {
         startService(new Intent(getApplicationContext(), InitialIntentService.class));
         registerActivityLifecycleCallbacks();
+    }
+
+    /**
+     * 分包支持
+     */
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     /**

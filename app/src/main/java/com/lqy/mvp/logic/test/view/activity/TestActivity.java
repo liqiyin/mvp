@@ -120,6 +120,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         super.onDestroy();
         unbinder.unbind();
         presenter.unSubscribe();
+        adapter.stopAdAutoScroll();
     }
 
     /**

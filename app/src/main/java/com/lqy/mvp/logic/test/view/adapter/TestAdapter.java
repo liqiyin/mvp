@@ -34,6 +34,7 @@ public class TestAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder
     private final int ITEM_TYPE_NORMAL = 1;
     List<InTheatersResp.SubjectsBean> dataList;
     Context context;
+    AdViewHolder adHolder;
 
     public TestAdapter(Context context, List<InTheatersResp.SubjectsBean> dataList) {
         this.dataList = dataList;
@@ -55,7 +56,7 @@ public class TestAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof AdViewHolder) {
-            AdViewHolder adHolder = (AdViewHolder) holder;
+            adHolder = (AdViewHolder) holder;
             if (adHolder.viewPager.getAdapter() == null) {
                 List<Integer> list = new ArrayList<>();
                 list.add(R.mipmap.ic_launcher);
@@ -139,5 +140,13 @@ public class TestAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder
 
     public interface OnTestManagerItemClickListener extends AdapterView.OnItemClickListener {
         void onIconClick(String title);
+    }
+
+    /**
+     * activity的onDestory声明周期中调用 防止内存泄漏
+     */
+    public void stopAdAutoScroll() {
+        if (adHolder == null) return;
+        adHolder.viewPager.stopAutoScroll();
     }
 }
