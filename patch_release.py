@@ -5,6 +5,7 @@
 import zipfile
 import shutil
 import os
+import sys
 
 #版本号文件夹名(打补丁时必须修改 当前app为当前app版本号)
 VERSION_NAME = '1.0.0'
@@ -28,6 +29,9 @@ SYSTEM_LOAD_BASE_APK = SYSTEM_BAK_APK + 'tempApk/'
 SYSTEM_APK_PATCH_PATH = './app/build/outputs/patch/release/patch_signed_7zip.apk'
 
 if __name__ == '__main__':
+    if not os.path.exists(BASE_BAK_APK):
+        sys.exit()
+
     #删除系统备份文件夹中文件
     if os.path.exists(SYSTEM_BAK_APK):
         shutil.rmtree(SYSTEM_BAK_APK)
