@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="com.lb.duouo.library">
+    package="com.lqy.mvp.library">
 
     <application
         android:allowBackup="true"

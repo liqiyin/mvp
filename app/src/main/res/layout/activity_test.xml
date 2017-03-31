@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.lb.duouo.library.widget.PullRefreshView
+    <com.lqy.mvp.library.widget.PullRefreshView
         android:id="@+id/prv_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
