@@ -13,6 +13,7 @@ android {
     }
     buildTypes {
         release {
+            //是否打开混淆
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -49,6 +50,8 @@ dependencies {
     compile rootProject.ext.dependencies["converter-gson"]
     compile rootProject.ext.dependencies["systembar"]
     compile rootProject.ext.dependencies["meterial_dialog"]
+    compile rootProject.ext.dependencies["multidex"]
+    compile rootProject.ext.dependencies["crashreport_upgrade"]
 
     compile 'org.glassfish:javax.annotation:10.0-b28'
 }

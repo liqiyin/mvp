@@ -18,7 +18,7 @@
 * xml代码中不允许出现中文字符串，必须在strings.xml中定义
 
 #### 文件位置
-* 所有图片资源放在mipmap文件夹下，生成hdpi,xhdpi,xxhdpi三种规格，不允许放入drawable文件夹下
+* 所有图片资源放在mipmap文件夹下，生成hdpi,xhdpi,xxhdpi三种规格，不允许放入drawable文件夹下（使用项目下Resizer-1.4.1.jar生成图片）
 * 图片命名尽量不使用数字标记
 
 ### 二、Third Library
@@ -34,3 +34,44 @@
 * 不能在library中引用库，否则会出现运行时错误
 
 #### MaterialDialog弹框 https://github.com/drakeet/MaterialDialog
+
+### 三、账号相关
+#### 应用宝
+2652846971<br>yunying2015
+
+#### 百度
+2plus1baby@ijia365.com <br> yunying2015
+
+#### 360
+2plus1baby@ijia365.com <br> yunying2015
+
+#### 小米
+15201628002 <br> duoduo2015
+
+#### 友盟
+37158835@qq.com <br> Benben@521
+
+### 四、必读文章
+
+1. [Android性能优化典范 - 第1季](http://hukai.me/android-performance-patterns/)
+2. [Android性能优化典范 - 第2季](http://hukai.me/android-performance-patterns-season-2/)
+3. [Android性能优化典范 - 第3季](http://hukai.me/android-performance-patterns-season-3/)
+4. [Android性能优化典范 - 第4季](http://hukai.me/android-performance-patterns-season-4/)
+5. [Android性能优化典范 - 第5季](http://hukai.me/android-performance-patterns-season-5/)
+6. [Android内存优化之OOM](http://hukai.me/android-performance-oom/)
+7. [Android开发最佳实践](http://hukai.me/android-dev-patterns/)
+8. [Android性能优化之渲染篇](http://hukai.me/android-performance-render/)
+9. [Android性能优化之运算篇](http://hukai.me/android-performance-compute/)
+10. [Android性能优化之内存篇](http://hukai.me/android-performance-memory/)
+11. [Android性能优化之电量篇](http://hukai.me/android-performance-battery/)
+12. [Android Training - 管理应用的内存](http://hukai.me/android-training-managing_your_app_memory/)
+13. [Android Training - 提升布局文件的性能(Lesson 1 - 优化布局的层级)](http://hukai.me/android-training-improve-layouts-lesson-1/)
+14. [Android Training - 提升布局文件的性能(Lesson 2 - 使用include标签重用Layout)](http://hukai.me/android-training-improve-layouts-lesson-2/)
+15. [Android Training - 提升布局文件的性能(Lesson 3 - 使用viewStub按需载入视图)](http://hukai.me/android-training-improve-layouts-lesson-3/)
+16. [Android Training - 提升布局文件的性能(Lesson 4 - 使用ViewHolder来提升ListView的性能)](http://hukai.me/android-training-improve-layouts-lesson-4/)
+17. [对于开发者来说，Android 的开发者选项里有哪些实用的功能？](https://www.zhihu.com/question/29967530)
+18. [Android内存溢出分析](http://blog.tisa007.com/tech/android_memory_management_and_solve_oom_problem.html)
+19. [Android开发经验总结](http://zmywly8866.github.io/2015/12/12/android-develop-experencies.html)
+
+### 五、版本更新和热更新流程
+![更新流程](./tools/update_chart_flow.png)

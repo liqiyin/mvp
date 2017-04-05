@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.neenbedankt.android-apt'
+//平常开发时注释掉这一行 否则调试的时候会在app/build/bakApk/中备份每次编译的版本 占用磁盘空间
+//打包时要打开这一行代码
+//apply from: 'tinker-support.gradle'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -19,15 +22,36 @@ android {
         versionName rootProject.ext.android.versionName
 
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+        ndk {
+            abiFilters 'armeabi-v7a', 'armeabi', 'x86'
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../tools/keystore.jks")      //签名文件
+            storePassword "111111"
+            keyAlias "lqy"
+            keyPassword "111111"     //签名密码
+        }
     }
     buildTypes {
         debug {
-            buildConfigField("boolean", "LOG_DEBUG", "true")
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
         }
 
         release {
-            buildConfigField("boolean", "LOG_DEBUG", "false")
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            //是否打开混淆
+            minifyEnabled true
+            //是否zip优化
+            zipAlignEnabled true
+            //删除无用资源
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -42,7 +66,14 @@ dependencies {
     compile project(':library')
 
     compile rootProject.ext.dependencies["butterknife"]
-    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
+    apt rootProject.ext.dependencies["butterknife-compiler"]
     apt rootProject.ext.dependencies["permission_compiler"]
     compile rootProject.ext.dependencies["permission_api"]
+    debugCompile rootProject.ext.dependencies["leakcanary_debug"]
+    releaseCompile rootProject.ext.dependencies["leakcanary_release"]
+
+    //头部滚动viewpager
+    compile ('cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
+        exclude module: 'support-v4'
+    }
 }
