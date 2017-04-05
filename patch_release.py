@@ -7,17 +7,11 @@ import shutil
 import os
 import sys
 
-#版本号文件夹名(打补丁时必须修改 当前app为当前app版本号)
-VERSION_NAME = '1.0.0'
-
-#补丁版本号(若现在只有apk_0文件夹 那么PATCH_VERSION则+1 必须修改)
-PATCH_VERSION = 1
-
-#源APK路径
-BASE_BAK_APK = './release_apks/' + VERSION_NAME + '/apk_' + str(PATCH_VERSION - 1) + '/'
+#基带APK路径
+BASE_BAK_APK = ''
 
 #打过补丁之后的新APK路径
-NEW_BAK_APK = './release_apks/' + VERSION_NAME + '/apk_' + str(PATCH_VERSION) + '/'
+NEW_BAK_APK = ''
 
 #系统备份apk路径
 SYSTEM_BAK_APK = './app/build/bakApk/'
@@ -28,8 +22,27 @@ SYSTEM_LOAD_BASE_APK = SYSTEM_BAK_APK + 'tempApk/'
 #系统生成的apk补丁路径
 SYSTEM_APK_PATCH_PATH = './app/build/outputs/patch/release/patch_signed_7zip.apk'
 
+#版本号文件夹名(打补丁时必须修改 当前app为当前app版本号)
+#补丁版本号(若现在只有apk_0文件夹 那么PATCH_VERSION则+1 必须修改)
+def initArgs(versionName, patchVersion):
+    global BASE_BAK_APK
+    global NEW_BAK_APK
+    patchVersion = int(patchVersion)
+    BASE_BAK_APK = './release_apks/' + versionName + '/apk_0/'
+    NEW_BAK_APK = './release_apks/' + versionName + '/apk_' + str(patchVersion) + '/'
+
 if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        sys.exit()
+
+    initArgs(sys.argv[1], sys.argv[2])
+
     if not os.path.exists(BASE_BAK_APK):
+        print('基带版本不存在')
+        sys.exit()
+
+    if os.path.exists(NEW_BAK_APK):
+        print('补丁版本已存在')
         sys.exit()
 
     #删除系统备份文件夹中文件
