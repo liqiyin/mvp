@@ -72,3 +72,6 @@
 17. [对于开发者来说，Android 的开发者选项里有哪些实用的功能？](https://www.zhihu.com/question/29967530)
 18. [Android内存溢出分析](http://blog.tisa007.com/tech/android_memory_management_and_solve_oom_problem.html)
 19. [Android开发经验总结](http://zmywly8866.github.io/2015/12/12/android-develop-experencies.html)
+
+### 五、版本更新和热更新流程
+![更新流程](./tools/update_chart_flow.png)
