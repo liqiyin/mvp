@@ -36,20 +36,6 @@
 #### MaterialDialog弹框 https://github.com/drakeet/MaterialDialog
 
 ### 三、账号相关
-#### 应用宝
-2652846971<br>yunying2015
-
-#### 百度
-2plus1baby@ijia365.com <br> yunying2015
-
-#### 360
-2plus1baby@ijia365.com <br> yunying2015
-
-#### 小米
-15201628002 <br> duoduo2015
-
-#### 友盟
-37158835@qq.com <br> Benben@521
 
 ### 四、必读文章
 
