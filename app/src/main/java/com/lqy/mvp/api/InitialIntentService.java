@@ -4,13 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-import com.lqy.mvp.BuildConfig;
-import com.lqy.mvp.Constants;
-import com.lqy.mvp.util.SystemUtils;
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.BuglyStrategy;
-import com.tencent.bugly.beta.Beta;
-
 /**
  * Created by slam.li on 2017/3/24.
  * 耗时初始化操作在该service中实现

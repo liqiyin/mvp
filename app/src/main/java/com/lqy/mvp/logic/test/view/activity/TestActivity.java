@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.lqy.mvp.R;
 import com.lqy.mvp.library.activity.BaseActivity;
+import com.lqy.mvp.library.util.SystemUtils;
 import com.lqy.mvp.library.widget.PullRefreshView;
 import com.lqy.mvp.logic.test.contract.TestContract;
 import com.lqy.mvp.logic.test.model.http.response.InTheatersResp;
@@ -101,6 +102,11 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         showToast("热修复");
     }
 
+    @OnClick(R.id.btn_scan)
+    void onScanClick() {
+        ActivityUtils.jumpToQrCodeActivity(mActivity);
+    }
+
     @Override
     public void displayRequestContent(List<InTheatersResp.SubjectsBean> subjectsBeanList) {
         pullRefreshView.onRequestCompleted();
@@ -156,7 +162,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         new MaterialDialog(this)
                 .setTitle("提醒")
                 .setMessage("请授予联系人权限")
-                .setPositiveButton("确定", v -> ActivityUtils.jumpToGrantPermission(mActivity))
+                .setPositiveButton("确定", v -> SystemUtils.jumpToGrantPermission(mActivity))
                 .setNegativeButton("取消", v -> {
                     //TODO
                 })

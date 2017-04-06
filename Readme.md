@@ -35,6 +35,9 @@
 
 #### MaterialDialog弹框 https://github.com/drakeet/MaterialDialog
 
+#### 二维码 https://github.com/bingoogolapple/BGAQRCode-Android
+* debug版本扫描二维码会很卡 release速度会快
+
 ### 三、账号相关
 
 ### 四、必读文章

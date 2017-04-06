@@ -13,7 +13,7 @@ import android.support.multidex.MultiDex;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lqy.mvp.api.InitialIntentService;
 import com.lqy.mvp.library.activity.BaseActivity;
-import com.lqy.mvp.util.SystemUtils;
+import com.lqy.mvp.library.util.SystemUtils;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.BuglyStrategy;

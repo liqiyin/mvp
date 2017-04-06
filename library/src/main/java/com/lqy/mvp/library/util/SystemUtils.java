@@ -1,4 +1,4 @@
-package com.lqy.mvp.util;
+package com.lqy.mvp.library.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
-import com.lqy.mvp.MyApplication;
+
+import com.lqy.mvp.library.activity.BaseActivity;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -30,9 +33,8 @@ public class SystemUtils {
     /**
      * @return
      */
-    public static String getIMSI() {
-        TelephonyManager telephonyManager = (TelephonyManager) MyApplication.getInstance()
-                .getApplicationContext()
+    public static String getIMSI(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
         String IMSI = telephonyManager.getSubscriberId();
         return IMSI;
@@ -41,15 +43,14 @@ public class SystemUtils {
     /**
      * @return
      */
-    public static String getDeviceID() {
-        Context context = MyApplication.getInstance();
+    public static String getDeviceID(Context context) {
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
         final String tmDevice, tmSerial, androidId;
         tmDevice = tm.getDeviceId() + "";
         tmSerial = tm.getSimSerialNumber() + "";
-        androidId = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider
-                .Settings.Secure.ANDROID_ID) + "";
+        androidId = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID) + "";
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
         String deviceId = deviceUuid.toString();
@@ -59,8 +60,8 @@ public class SystemUtils {
     /**
      * @return
      */
-    public static int getVersionCode() {
-        PackageInfo packInfo = getPackageInfo();
+    public static int getVersionCode(Context context) {
+        PackageInfo packInfo = getPackageInfo(context);
         if (packInfo != null) {
             return packInfo.versionCode;
         } else {
@@ -71,8 +72,8 @@ public class SystemUtils {
     /**
      * @return
      */
-    public static String getVersionName() {
-        PackageInfo packInfo = getPackageInfo();
+    public static String getVersionName(Context context) {
+        PackageInfo packInfo = getPackageInfo(context);
         if (packInfo != null) {
             return packInfo.versionName;
         } else {
@@ -104,9 +105,8 @@ public class SystemUtils {
     /**
      * @return
      */
-    public static PackageInfo getPackageInfo() {
+    public static PackageInfo getPackageInfo(Context context) {
         try {
-            Context context = MyApplication.getInstance();
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
         } catch (Exception e) {
             return null;
@@ -117,8 +117,8 @@ public class SystemUtils {
      * @param targetPackage
      * @return
      */
-    public static boolean isPackageExisted(String targetPackage) {
-        PackageManager pm = MyApplication.getInstance().getPackageManager();
+    public static boolean isPackageExisted(Context context, String targetPackage) {
+        PackageManager pm = context.getPackageManager();
         try {
             PackageInfo info = pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
@@ -201,6 +201,33 @@ public class SystemUtils {
             }
         }
         return channel;
+    }
+
+    /**
+     * 跳转至授予app权限界面
+     * @param activity
+     */
+    public static void jumpToGrantPermission(BaseActivity activity) {
+        PackageManager pm = activity.getPackageManager();
+        PackageInfo info = null;
+        try {
+            info = pm.getPackageInfo(activity.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (info == null) return;
+        if (SystemUtils.isMIUI(activity)) {
+            Intent i = new Intent("miui.intent.action.APP_PERM_EDITOR");
+            i.setClassName("com.android.settings", "com.miui.securitycenter.permission.AppPermissionsEditor");
+            i.putExtra("extra_package_uid", info.applicationInfo.uid);
+            try {
+                activity.startActivity(i);
+            } catch (Exception e) {}
+        } else {
+            Uri packageUri = Uri.parse("package:" + info.packageName);
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageUri);
+            activity.startActivity(intent);
+        }
     }
 
 }

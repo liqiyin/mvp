@@ -24,4 +24,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="测试热修复"/>
+
+    <Button
+        android:id="@+id/btn_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_patch"
+        android:text="扫描二维码"/>
 </RelativeLayout>
