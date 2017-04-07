@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <cn.bingoogolapple.qrcode.zxing.ZXingView
@@ -36,4 +34,4 @@
         app:qrcv_tipTextSize="12sp"
         app:qrcv_toolbarHeight="56dp"
         app:qrcv_topOffset="90dp" />
-</FrameLayout>
+</merge>

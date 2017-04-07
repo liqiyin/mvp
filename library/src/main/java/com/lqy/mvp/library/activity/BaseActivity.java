@@ -79,7 +79,7 @@ public class BaseActivity extends FragmentActivity {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public void showTost(int strId) {
+    public void showToast(int strId) {
         Toast.makeText(context, strId, Toast.LENGTH_SHORT).show();
     }
 }
