@@ -52,6 +52,9 @@ dependencies {
     compile rootProject.ext.dependencies["meterial_dialog"]
     compile rootProject.ext.dependencies["multidex"]
     compile rootProject.ext.dependencies["crashreport_upgrade"]
+    compile rootProject.ext.dependencies["zxing"]
+    compile rootProject.ext.dependencies["bga_qrcodecore"]
+    compile rootProject.ext.dependencies["bga_zxing"]
 
     compile 'org.glassfish:javax.annotation:10.0-b28'
 }

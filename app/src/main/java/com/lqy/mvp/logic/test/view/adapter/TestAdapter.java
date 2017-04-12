@@ -64,19 +64,13 @@ public class TestAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder
                 adHolder.viewPager.setAdapter(new TestAdAdapter(context, list).setInfiniteLoop(true));
                 adHolder.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                    }
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
                     @Override
-                    public void onPageSelected(int position) {
-
-                    }
+                    public void onPageSelected(int position) {}
 
                     @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
+                    public void onPageScrollStateChanged(int state) {}
                 });
 
                 adHolder.viewPager.setInterval(5000);

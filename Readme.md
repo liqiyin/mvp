@@ -22,9 +22,6 @@
 * 图片命名尽量不使用数字标记
 
 ### 二、Third Library
-#### 安居客android架构：https://github.com/BaronZ88/MinimalistWeather
-* 在该框架上进行修改，抛弃了dagger2的依赖注入框架
-* 注意mvp设计模式的编码规范，不允许出现不同层级工作任务混淆的问题
 
 #### 沉浸式状态栏 https://github.com/jgilfelt/SystemBarTint
 * 注意style项目主题的设置
@@ -34,6 +31,9 @@
 * 不能在library中引用库，否则会出现运行时错误
 
 #### MaterialDialog弹框 https://github.com/drakeet/MaterialDialog
+
+#### 二维码 https://github.com/bingoogolapple/BGAQRCode-Android
+* debug版本扫描二维码会很卡 release速度会快
 
 ### 三、账号相关
 

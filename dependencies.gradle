@@ -5,6 +5,7 @@ def butterKnifeVersion = "8.4.0"
 def okHttpVersion = "3.6.0"
 def leakCanaryVersion = "1.5"
 def permissionVersion = "1.0.0"
+def bgaQrcodeVersion = "1.1.7"
 
 project.ext {
     android = [
@@ -56,6 +57,11 @@ project.ext {
             // leakcanary
             'leakcanary_debug'           :"com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
             'leakcanary_release'         :"com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
+
+            //qrcode
+            'zxing'                      :"com.google.zxing:core:3.2.1",
+            'bga_qrcodecore'             :"cn.bingoogolapple:bga-qrcodecore:${bgaQrcodeVersion}@aar",
+            'bga_zxing'                  :"cn.bingoogolapple:bga-zxing:${bgaQrcodeVersion}@aar",
 
             //others
             'multidex'                   :"com.android.support:multidex:1.0.1",//分包

@@ -61,9 +61,9 @@ public class BaseActivity extends FragmentActivity {
         // enable navigation bar tint
         tintManager.setNavigationBarTintEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            tintManager.setTintColor(getResources().getColor(colorId, null));
+            tintManager.setStatusBarTintColor(getResources().getColor(colorId, null));
         } else {
-            tintManager.setTintColor(getResources().getColor(colorId));
+            tintManager.setStatusBarTintColor(getResources().getColor(colorId));
         }
     }
 
@@ -79,7 +79,7 @@ public class BaseActivity extends FragmentActivity {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public void showTost(int strId) {
+    public void showToast(int strId) {
         Toast.makeText(context, strId, Toast.LENGTH_SHORT).show();
     }
 }
