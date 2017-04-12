@@ -1,6 +1,7 @@
 package com.lqy.mvp.library.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -75,7 +76,6 @@ public class PullRefreshView extends FrameLayout {
         });
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void setOnPullRefreshManageListener(OnPullRefreshManageListener listener) {
@@ -109,5 +109,22 @@ public class PullRefreshView extends FrameLayout {
     public void onRequestCompleted() {
         refreshLayout.setRefreshing(false);
         isRequesting = false;
+    }
+
+    /**
+     * 配置recycleView
+     * @param layoutManager 布局管理类
+     * @param prefetchCount 一个页面最少显示的item数量
+     */
+    public void config(RecyclerView.LayoutManager layoutManager, int prefetchCount) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            layoutManager.setItemPrefetchEnabled(true);
+            if (layoutManager instanceof LinearLayoutManager) {
+                ((LinearLayoutManager)layoutManager).setInitialPrefetchItemCount(prefetchCount);
+            }
+        } else {
+            layoutManager.setItemPrefetchEnabled(false);
+        }
+        recyclerView.setLayoutManager(layoutManager);
     }
 }

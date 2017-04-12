@@ -12,7 +12,7 @@ import rx.Observable;
 
 public class TestRepository {
     public static Observable<InTheatersResp> getInTheaters(int page) {
-        final int PAGE_SIZE = 10;
+        final int PAGE_SIZE = 20;
         int start = page * PAGE_SIZE;
         Observable<InTheatersResp> observableFromNetWork =
                 ApiClient.getInstance().getInTheaters("0b2bdeda43b5688921839c8ecb20399b", "上海", start, PAGE_SIZE, "", "")

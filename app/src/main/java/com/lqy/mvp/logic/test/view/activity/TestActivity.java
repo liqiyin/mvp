@@ -3,6 +3,7 @@ package com.lqy.mvp.logic.test.view.activity;
 import android.Manifest;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     void initView() {
         dataList = new ArrayList<>();
         adapter = new TestAdapter(this, dataList);
+        pullRefreshView.config(new LinearLayoutManager(context), 9);
         adapter.setOnItemClickListener(new TestAdapter.OnTestManagerItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
