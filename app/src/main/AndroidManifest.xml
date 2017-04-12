@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name="com.lqy.mvp.MyApplication"
@@ -18,15 +19,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FullBleedTheme">
-        <activity android:name="com.lqy.mvp.logic.test.view.activity.TestActivity">
+        <activity
+            android:name=".logic.test.view.activity.SplashActivity"
+            android:theme="@style/AppStartPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".logic.test.view.activity.TestActivity"
+            android:screenOrientation="portrait" />
+
         <service
-            android:name="com.lqy.mvp.api.InitialIntentService"
+            android:name=".api.InitialIntentService"
             android:exported="false" />
 
         <activity

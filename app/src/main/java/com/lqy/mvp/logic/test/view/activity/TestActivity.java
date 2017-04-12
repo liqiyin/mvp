@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lqy.mvp.R;
@@ -36,11 +37,14 @@ import me.drakeet.materialdialog.MaterialDialog;
  * 注意subscribe()和unsubscribe()一定要调用
  */
 public class TestActivity extends BaseActivity implements TestContract.View {
+    private static final int CONTACT_PERMISSION_REQUEST_CODE = 1;
 
     TestContract.Presenter presenter;
     Unbinder unbinder;
     @BindView(R.id.prv_main)
     PullRefreshView pullRefreshView;
+    @BindView(R.id.tv_channel)
+    TextView tvChannel;
 
     List<InTheatersResp.SubjectsBean> dataList;
     TestAdapter adapter;
@@ -51,6 +55,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         unbinder = ButterKnife.bind(this);
+        initView();
         presenter = new TestPresenter(this);
         presenter.subscribe();
         new Handler().post(() -> {
@@ -58,7 +63,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
             presenter.loadTestContent(pageStart);
         });
         setStatusBarColor(R.color.colorPrimaryDark);
-        initView();
     }
 
     void initView() {
@@ -90,12 +94,13 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         });
 
         pullRefreshView.setAdapter(adapter);
+        tvChannel.setText(SystemUtils.getQudao(mActivity));
     }
 
     @OnClick(R.id.btn)
     void onPermissionClick() {
         if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_CONTACTS, 4)) {
-            MPermissions.requestPermissions(mActivity, 4, Manifest.permission.READ_CONTACTS);
+            MPermissions.requestPermissions(mActivity, CONTACT_PERMISSION_REQUEST_CODE, Manifest.permission.READ_CONTACTS);
         }
     }
 
@@ -145,20 +150,20 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     }
 
     //授权成功
-    @PermissionGrant(4)
+    @PermissionGrant(CONTACT_PERMISSION_REQUEST_CODE)
     public void onPermissionSuccess() {
         showToast("授权");
     }
 
     //
     //授权失败
-    @PermissionDenied(4)
+    @PermissionDenied(CONTACT_PERMISSION_REQUEST_CODE)
     public void onPermissionFail() {
         showToast("拒绝");
     }
 
     //授权失败之后 若为关键权限则再次提示授权
-    @ShowRequestPermissionRationale(4)
+    @ShowRequestPermissionRationale(CONTACT_PERMISSION_REQUEST_CODE)
     public void onPermissionExplaination() {
         showToast("解释");
         new MaterialDialog(this)

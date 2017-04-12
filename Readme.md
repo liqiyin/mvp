@@ -22,9 +22,6 @@
 * 图片命名尽量不使用数字标记
 
 ### 二、Third Library
-#### 安居客android架构：https://github.com/BaronZ88/MinimalistWeather
-* 在该框架上进行修改，抛弃了dagger2的依赖注入框架
-* 注意mvp设计模式的编码规范，不允许出现不同层级工作任务混淆的问题
 
 #### 沉浸式状态栏 https://github.com/jgilfelt/SystemBarTint
 * 注意style项目主题的设置

@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.lqy.mvp.library.activity.BaseActivity;
 import com.lqy.mvp.logic.pub.activity.QrCodeActivity;
+import com.lqy.mvp.logic.test.view.activity.TestActivity;
 
 /**
  * Created by slam.li on 2017/3/28.
@@ -16,5 +17,9 @@ public class ActivityUtils {
      */
     public static void jumpToQrCodeActivity(BaseActivity activity) {
         activity.startActivity(new Intent(activity, QrCodeActivity.class));
+    }
+
+    public static void jumpToTestActivity(BaseActivity activity) {
+        activity.startActivity(new Intent(activity, TestActivity.class));
     }
 }
