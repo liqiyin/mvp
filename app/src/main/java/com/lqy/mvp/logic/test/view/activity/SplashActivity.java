@@ -15,5 +15,6 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityUtils.jumpToTestActivity(mActivity);
+        finish();
     }
 }
