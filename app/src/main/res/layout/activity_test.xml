@@ -33,10 +33,18 @@
         android:layout_below="@+id/btn_patch"
         android:text="扫描二维码" />
 
+    <Button
+        android:id="@+id/btn_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_scan"
+        android:text="图库" />
+
     <TextView
         android:id="@+id/tv_channel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/btn_scan" />
+        android:layout_below="@+id/btn_gallery" />
 </RelativeLayout>

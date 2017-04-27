@@ -2,6 +2,7 @@ package com.lqy.mvp.util;
 
 import android.content.Intent;
 
+import com.lqy.mvp.gallery.GalleryActivity;
 import com.lqy.mvp.library.activity.BaseActivity;
 import com.lqy.mvp.logic.pub.activity.QrCodeActivity;
 import com.lqy.mvp.logic.test.view.activity.TestActivity;
@@ -12,11 +13,20 @@ import com.lqy.mvp.logic.test.view.activity.TestActivity;
  */
 
 public class ActivityUtils {
+    public static final int REQUEST_PICK_PHOTO = 7001;
     /**
      * 二维码跳转
      */
     public static void jumpToQrCodeActivity(BaseActivity activity) {
         activity.startActivity(new Intent(activity, QrCodeActivity.class));
+    }
+
+    /**
+     * 选择图库
+     */
+    public static void jumpToGalleryActivity(BaseActivity activity) {
+        Intent intent = new Intent(activity, GalleryActivity.class);
+        activity.startActivityForResult(intent, REQUEST_PICK_PHOTO);
     }
 
     public static void jumpToTestActivity(BaseActivity activity) {

@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-public class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
 
     /*
      * 解决Vector兼容性问题

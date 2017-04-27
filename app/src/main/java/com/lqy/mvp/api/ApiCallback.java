@@ -1,6 +1,11 @@
 package com.lqy.mvp.api;
 
-import rx.Observer;
+import com.lqy.mvp.MyApplication;
+import com.lqy.mvp.R;
+
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by slam.li on 2017/3/21.
@@ -23,12 +28,13 @@ public abstract class ApiCallback<T> implements Observer<T> {
             } else {
                 onFail(((BaseResponse) t).msg);
             }
+        } else {
+            onFail(MyApplication.getInstance().getString(R.string.wrong_type));
         }
-        onFail("返回类型错误");
     }
 
     @Override
-    public void onCompleted() {}
+    public void onComplete() {}
 
     protected abstract void onSuccess(T obj);
 

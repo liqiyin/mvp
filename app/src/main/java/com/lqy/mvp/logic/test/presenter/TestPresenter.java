@@ -6,8 +6,9 @@ import com.lqy.mvp.logic.test.model.http.response.InTheatersResp;
 import com.lqy.mvp.logic.test.model.repository.TestRepository;
 import com.lqy.mvp.library.util.RxSchedulerUtils;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by slam.li on 2017/3/21.
@@ -17,9 +18,9 @@ import rx.subscriptions.CompositeSubscription;
 public class TestPresenter implements TestContract.Presenter {
 
     private TestContract.View view;
-    private CompositeSubscription subscriptions;
+    private CompositeDisposable compositeDisposable;
     public TestPresenter(TestContract.View view) {
-        subscriptions = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
         this.view = view;
     }
 
@@ -28,14 +29,19 @@ public class TestPresenter implements TestContract.Presenter {
 
     @Override
     public void unSubscribe() {
-        subscriptions.clear();
+        compositeDisposable.clear();
     }
 
     @Override
     public void loadTestContent(int start) {
-        Subscription subscription = TestRepository.getInTheaters(start)
+        TestRepository.getInTheaters(start)
             .compose(RxSchedulerUtils.normalSchedulersTransformer())
             .subscribe(new ApiCallback<InTheatersResp>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable disposable) {
+                    compositeDisposable.add(disposable);
+                }
+
                 @Override
                 protected void onSuccess(InTheatersResp obj) {
                     view.displayRequestContent(obj.subjects);
@@ -46,6 +52,5 @@ public class TestPresenter implements TestContract.Presenter {
                     view.displayRequestContent(null);
                 }
             });
-        subscriptions.add(subscription);
     }
 }

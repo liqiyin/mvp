@@ -2,9 +2,9 @@ package com.lqy.mvp.api;
 
 import com.lqy.mvp.logic.test.model.http.response.InTheatersResp;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by slam.li on 2017/3/20.

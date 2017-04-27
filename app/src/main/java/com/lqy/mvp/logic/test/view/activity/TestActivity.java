@@ -114,6 +114,11 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         ActivityUtils.jumpToQrCodeActivity(mActivity);
     }
 
+    @OnClick(R.id.btn_gallery)
+    void onGalleryClick() {
+        ActivityUtils.jumpToGalleryActivity(mActivity);
+    }
+
     @Override
     public void displayRequestContent(List<InTheatersResp.SubjectsBean> subjectsBeanList) {
         pullRefreshView.onRequestCompleted();

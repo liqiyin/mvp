@@ -32,6 +32,10 @@
             android:name=".logic.test.view.activity.TestActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".gallery.GalleryActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".api.InitialIntentService"
             android:exported="false" />
