@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.lqy.mvp.R;
 import com.lqy.mvp.gallery.model.GAlbum;
 import com.lqy.mvp.gallery.model.GImage;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -22,7 +24,7 @@ import io.reactivex.Observable;
  */
 
 public class GalleryRepository {
-    public static Observable<HashMap<String, GAlbum>> getImageList(Context context) {
+    public static Observable<List<GAlbum>> getImageMap(Context context) {
         return Observable.create(subscriber -> {
             Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             String key_MIME_TYPE = MediaStore.Images.Media.MIME_TYPE;
@@ -39,9 +41,9 @@ public class GalleryRepository {
             List<GImage> allImageList = null;
             if (cursor != null) {
                 if (cursor.moveToLast()) {
-                    albumHashMap = new HashMap<>();
+                    albumHashMap = new LinkedHashMap<>();
                     allImageList = new ArrayList<>();
-                    GAlbum allAlbum = new GAlbum(allImageList, "所有");
+                    GAlbum allAlbum = new GAlbum(allImageList, context.getResources().getString(R.string.all));
                     albumHashMap.put("", allAlbum);
                     while (true) {
                         String imagePath = cursor.getString(0);
@@ -50,7 +52,7 @@ public class GalleryRepository {
                         String parentPath = parentFile.getAbsolutePath();
                         String parentName = parentFile.getName();
 
-                        GImage image = new GImage(imageFile.getName(), imagePath);
+                        GImage image = new GImage(imageFile.getName(), Uri.fromFile(imageFile));
                         allImageList.add(image);
                         if (albumHashMap.get(parentPath) == null) {
                             List<GImage> imageList = new ArrayList<>();
@@ -67,7 +69,11 @@ public class GalleryRepository {
                 }
                 cursor.close();
             }
-            subscriber.onNext(albumHashMap);
+            if (albumHashMap != null) {
+                subscriber.onNext(new ArrayList<>(albumHashMap.values()));
+            } else {
+                subscriber.onError(new IllegalStateException("can't get photos"));
+            }
             subscriber.onComplete();
         });
     }

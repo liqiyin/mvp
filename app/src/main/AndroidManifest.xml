@@ -44,13 +44,16 @@
             android:name=".logic.pub.activity.QrCodeActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".gallery.GalleryPreviewActivity"
+            android:screenOrientation="portrait" />
+
         <!-- Bugly升级SDK配置开始  -->
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:theme="@android:style/Theme.Translucent" />
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.lqy.mvp.hotfix.fileProvider"
+            android:authorities="com.lqy.mvp.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

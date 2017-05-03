@@ -8,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.lqy.mvp.R;
 import com.lqy.mvp.library.adapter.BaseRecyclerViewAdapter;
 import com.lqy.mvp.logic.test.model.http.response.InTheatersResp;
+import com.lqy.mvp.util.PicassoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,8 @@ public class TestAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder
         if (holder instanceof NormalViewHolder) {
             NormalViewHolder normalHolder = (NormalViewHolder) holder;
             InTheatersResp.SubjectsBean subject = dataList.get(position - 1);
-            normalHolder.imageIcon.setImageURI(Uri.parse(subject.images.large));
+            PicassoUtils.loadNormalImage(normalHolder.imageIcon, Uri.parse(subject.images.large), R.mipmap.ic_launcher_round);
+
             normalHolder.textTitle.setText(subject.title);
 
             normalHolder.imageIcon.setOnClickListener(v -> {
@@ -110,7 +112,7 @@ public class TestAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder
 
     static class NormalViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_icon)
-        public SimpleDraweeView imageIcon;
+        public ImageView imageIcon;
         @BindView(R.id.text_title)
         public TextView textTitle;
 

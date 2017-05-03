@@ -230,4 +230,16 @@ public class SystemUtils {
         }
     }
 
+    public static int getScreenWidth(BaseActivity context){
+        android.graphics.Point point = new android.graphics.Point();
+        context.getWindowManager().getDefaultDisplay().getSize(point);
+        return point.x;
+    }
+
+    public static int getScreenHeight(BaseActivity context){
+        android.graphics. Point point = new android.graphics.Point();
+        context.getWindowManager().getDefaultDisplay().getSize(point);
+        return point.y;
+    }
+
 }

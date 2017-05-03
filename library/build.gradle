@@ -57,6 +57,8 @@ dependencies {
     compile rootProject.ext.dependencies["bga_qrcodecore"]
     compile rootProject.ext.dependencies["bga_zxing"]
     compile rootProject.ext.dependencies["luban"]
+    compile rootProject.ext.dependencies["picasso"]
+    compile rootProject.ext.dependencies["zoom_image"]
 
     compile 'org.glassfish:javax.annotation:10.0-b28'
 }

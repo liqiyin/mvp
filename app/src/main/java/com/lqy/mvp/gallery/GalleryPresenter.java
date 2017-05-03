@@ -18,10 +18,10 @@ public class GalleryPresenter implements GalleryContract.Presenter {
 
     @Override
     public void subscribe() {
-        Disposable disposable = GalleryRepository.getImageList(activity)
+        Disposable disposable = GalleryRepository.getImageMap(activity)
             .compose(RxSchedulerUtils.normalSchedulersTransformer())
-            .subscribe(imageList -> {
-                view.displayGallery();
+            .subscribe(albumList -> {
+                view.displayGallery(albumList);
             });
         compositeDisposable.add(disposable);
     }

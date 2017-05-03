@@ -1,6 +1,8 @@
 package com.lqy.mvp.logic.test.view.activity;
 
 import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lqy.mvp.R;
+import com.lqy.mvp.gallery.GalleryActivity;
 import com.lqy.mvp.library.activity.BaseActivity;
 import com.lqy.mvp.library.util.SystemUtils;
 import com.lqy.mvp.library.widget.PullRefreshView;
@@ -45,6 +48,8 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     PullRefreshView pullRefreshView;
     @BindView(R.id.tv_channel)
     TextView tvChannel;
+    @BindView(R.id.gallery_result)
+    TextView galleryResult;
 
     List<InTheatersResp.SubjectsBean> dataList;
     TestAdapter adapter;
@@ -179,5 +184,21 @@ public class TestActivity extends BaseActivity implements TestContract.View {
                     //TODO
                 })
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        switch (requestCode) {
+            case GalleryActivity.REQUEST_IMAGE:
+                ArrayList<Uri> uriArrayList = data.getParcelableArrayListExtra(GalleryActivity.RESULT_IMAGE_LIST);
+                StringBuilder builder = new StringBuilder();
+                for (Uri uri: uriArrayList) {
+                    builder.append(uri.toString()+"\n");
+                }
+                galleryResult.setText(builder.toString());
+                break;
+        }
     }
 }

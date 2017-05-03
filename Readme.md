@@ -35,6 +35,13 @@
 #### 二维码 https://github.com/bingoogolapple/BGAQRCode-Android
 * debug版本扫描二维码会很卡 release速度会快
 
+#### fresco和picasso图片加载框架选择
+* 随你怎么用，哪个用的爽用哪个，前提是不能让界面出现卡顿的现象！！！
+* 列表中最好使用picasso加载，fresco加载网络大图很耗内存，而picasso会优化很多，具体看场景使用
+* fresco支持viewAspectRatio和roundAsCircle等属性，对适配和圆角等工作比较方便，而picasso实现这些功能较复杂，使用遇到这种情况推荐fresco
+* 加载gif或是渐进式图片使用fresco
+* http://www.jianshu.com/p/6729dc17586b glide和fresco对比(picasso和glide差不多)
+
 ### 三、账号相关
 
 ### 四、必读文章

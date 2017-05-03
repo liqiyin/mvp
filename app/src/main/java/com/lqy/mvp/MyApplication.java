@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.lqy.mvp.api.InitialIntentService;
 import com.lqy.mvp.library.activity.BaseActivity;
 import com.lqy.mvp.library.util.SystemUtils;
@@ -66,7 +68,11 @@ public class MyApplication extends Application {
      * 初始化fresco
      */
     void initFresco() {
-        Fresco.initialize(this);
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+                .setDownsampleEnabled(true)
+                .setBitmapsConfig(Bitmap.Config.RGB_565)
+                .build();
+        Fresco.initialize(this, config);
     }
 
     /**

@@ -13,7 +13,6 @@ import com.lqy.mvp.logic.test.view.activity.TestActivity;
  */
 
 public class ActivityUtils {
-    public static final int REQUEST_PICK_PHOTO = 7001;
     /**
      * 二维码跳转
      */
@@ -26,7 +25,7 @@ public class ActivityUtils {
      */
     public static void jumpToGalleryActivity(BaseActivity activity) {
         Intent intent = new Intent(activity, GalleryActivity.class);
-        activity.startActivityForResult(intent, REQUEST_PICK_PHOTO);
+        activity.startActivityForResult(intent, GalleryActivity.REQUEST_IMAGE);
     }
 
     public static void jumpToTestActivity(BaseActivity activity) {

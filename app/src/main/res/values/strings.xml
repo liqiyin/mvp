@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">mvp</string>
     <string name="wrong_type">类型错误</string>
+    <string name="all">所有</string>
+    <string name="back">返回</string>
+    <string name="apply_holder">使用(%s)</string>
 </resources>
