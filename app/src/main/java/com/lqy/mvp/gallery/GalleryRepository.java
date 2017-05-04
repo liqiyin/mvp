@@ -24,17 +24,30 @@ import io.reactivex.Observable;
  */
 
 public class GalleryRepository {
+    private static final Uri QUERY_URI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    private static final String[] PROJECTION = {
+            MediaStore.Images.Media.DATA,
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.MediaColumns.SIZE
+    };
+    private static final String SELECTION_ALL =
+            "(" + MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+            + " OR " + MediaStore.Files.FileColumns.MIME_TYPE + "=?"
+            + " OR " + MediaStore.Files.FileColumns.MIME_TYPE + "=?)"
+            + " AND " + MediaStore.MediaColumns.SIZE + ">0";
+    private static final String[] SELECTION_ALL_ARGS = {
+            "image/jpg", "image/jpeg", "image/png"
+    };
+
     public static Observable<List<GAlbum>> getImageMap(Context context) {
         return Observable.create(subscriber -> {
-            Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            String key_MIME_TYPE = MediaStore.Images.Media.MIME_TYPE;
-            String key_DATA = MediaStore.Images.Media.DATA;
             ContentResolver contentResolver = context.getContentResolver();
 
             // 只查询jpg和png的图片
-            Cursor cursor = contentResolver.query(imageUri, new String[]{key_DATA},
-                    key_MIME_TYPE + "=? or " + key_MIME_TYPE + "=? or " + key_MIME_TYPE + "=?",
-                    new String[]{"image/jpg", "image/jpeg", "image/png"},
+            Cursor cursor = contentResolver.query(QUERY_URI,
+                    PROJECTION,
+                    SELECTION_ALL,
+                    SELECTION_ALL_ARGS,
                     MediaStore.Images.Media.DATE_MODIFIED);
 
             HashMap<String, GAlbum> albumHashMap = null;
@@ -47,13 +60,20 @@ public class GalleryRepository {
                     albumHashMap.put("", allAlbum);
                     while (true) {
                         String imagePath = cursor.getString(0);
+                        int imageID = cursor.getInt(1);
+                        long imageSize = cursor.getLong(2);
+
                         File imageFile = new File(imagePath);
                         File parentFile = imageFile.getParentFile();
                         String parentPath = parentFile.getAbsolutePath();
                         String parentName = parentFile.getName();
 
-                        GImage image = new GImage(imageFile.getName(), Uri.fromFile(imageFile));
-                        allImageList.add(image);
+                        String uriStr = MediaStore.Images.Media.EXTERNAL_CONTENT_URI + File.separator + imageID;
+
+                        GImage image = new GImage(imageFile.getName(), imagePath, Uri.parse(uriStr));
+                        if (imageSize > 10 * 1024) {
+                            allImageList.add(image);
+                        }
                         if (albumHashMap.get(parentPath) == null) {
                             List<GImage> imageList = new ArrayList<>();
                             imageList.add(image);

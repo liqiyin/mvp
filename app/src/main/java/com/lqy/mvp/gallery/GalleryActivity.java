@@ -80,7 +80,7 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
                 intent.putParcelableArrayListExtra(GalleryConfig.EXTRA_ALBUM, (ArrayList<? extends Parcelable>) imageList);
                 intent.putExtra(GalleryConfig.EXTRA_ITEM, item);
                 intent.putExtra(GalleryConfig.EXTRA_DEFAULT_BUNDLE, selectionCollection.getDataWithBundle());
-                startActivityForResult(intent, GalleryConfig.REQUEST_PREVIEW);
+                startActivityForResult(intent, TakePhoto.REQUEST_CHOOSE);
             }
 
             @Override
@@ -161,7 +161,7 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         switch (requestCode) {
-            case GalleryConfig.REQUEST_PREVIEW:
+            case TakePhoto.REQUEST_CHOOSE:
                 Bundle bundle = data.getBundleExtra(GalleryConfig.EXTRA_RESULT_BUNDLE);
                 ArrayList<GImage> stateList = bundle.getParcelableArrayList(GalleryConfig.STATE_SELECTION);
                 adapter.updateSelection(stateList);
@@ -173,10 +173,22 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
 
     @OnClick(R.id.button_apply)
     void onButtonApply() {
-        Intent intent = new Intent();
-        intent.putParcelableArrayListExtra(RESULT_IMAGE_LIST, adapter.getSelectUriList());
-        setResult(RESULT_OK, intent);
+        sendResult(false);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        sendResult(true);
+        finish();
+    }
+
+    public void sendResult(boolean isCancel) {
+        Intent intent = new Intent();
+        if (!isCancel) {
+            intent.putParcelableArrayListExtra(RESULT_IMAGE_LIST, adapter.getSelectUriList());
+        }
+        setResult(RESULT_OK, intent);
     }
 
     private void setSelectedNum(int size) {

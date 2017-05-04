@@ -17,6 +17,6 @@ public interface GalleryConfig {
     String EXTRA_RESULT_APPLY = "extra_result_apply";
 
     String STATE_SELECTION = "state_selection";
+    String SIZE_SELECTION = "size_selection";
 
-    int REQUEST_PREVIEW = 2000;
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.lqy.mvp.R;
 import com.lqy.mvp.gallery.model.GImage;
+import com.lqy.mvp.gallery.model.SelectSpec;
 import com.lqy.mvp.gallery.model.SelectionCollection;
 import com.lqy.mvp.gallery.widget.CheckView;
 import com.lqy.mvp.gallery.widget.PreviewViewPager;
@@ -50,7 +51,8 @@ public class GalleryPreviewActivity extends BaseActivity {
     }
 
     private void initData() {
-        selectionCollection = new SelectionCollection(getIntent().getBundleExtra(GalleryConfig.EXTRA_DEFAULT_BUNDLE));
+        selectionCollection = new SelectionCollection();
+        selectionCollection.onCreate(getIntent().getBundleExtra(GalleryConfig.EXTRA_DEFAULT_BUNDLE), SelectSpec.getInstance());
     }
 
     private void initView() {

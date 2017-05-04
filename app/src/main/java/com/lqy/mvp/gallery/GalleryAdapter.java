@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.lqy.mvp.R;
 import com.lqy.mvp.gallery.model.GImage;
+import com.lqy.mvp.gallery.model.SelectSpec;
 import com.lqy.mvp.gallery.model.SelectionCollection;
 import com.lqy.mvp.gallery.widget.CheckView;
 import com.lqy.mvp.gallery.widget.GalleryGrid;
@@ -30,6 +31,7 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<GalleryAdapter.ViewH
         this.context = context;
         this.imageList = imageList;
         selectionCollection = new SelectionCollection();
+        selectionCollection.onCreate(null, SelectSpec.getInstance());
     }
 
     @Override
@@ -106,7 +108,7 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<GalleryAdapter.ViewH
         selectionCollection.overwrite(gImageList);
     }
 
-    public ArrayList<Uri> getSelectUriList() {
-        return selectionCollection.asListOfUri();
+    public ArrayList<GImage> getSelectUriList() {
+        return selectionCollection.getGImageList();
     }
 }

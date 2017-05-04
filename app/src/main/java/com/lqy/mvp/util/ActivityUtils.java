@@ -20,14 +20,6 @@ public class ActivityUtils {
         activity.startActivity(new Intent(activity, QrCodeActivity.class));
     }
 
-    /**
-     * 选择图库
-     */
-    public static void jumpToGalleryActivity(BaseActivity activity) {
-        Intent intent = new Intent(activity, GalleryActivity.class);
-        activity.startActivityForResult(intent, GalleryActivity.REQUEST_IMAGE);
-    }
-
     public static void jumpToTestActivity(BaseActivity activity) {
         activity.startActivity(new Intent(activity, TestActivity.class));
     }

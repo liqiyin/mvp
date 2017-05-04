@@ -1,31 +1,27 @@
 package com.lqy.mvp.gallery.model;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.lqy.mvp.gallery.GalleryConfig;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SelectionCollection {
 
     private Set<GImage> imageSet;
+    SelectSpec selectSpec;
 
-    private int maxSelectSize = GalleryConfig.MAX_SELECT_SIZE;
+    public SelectionCollection() {}
 
-    public SelectionCollection() {
-        this(null);
-    }
-
-    public SelectionCollection(Bundle bundle) {
+    public void onCreate(Bundle bundle, SelectSpec selectSpec) {
         if (bundle == null) {
             imageSet = new LinkedHashSet<>();
         } else {
             imageSet = new LinkedHashSet<>(bundle.getParcelableArrayList(GalleryConfig.STATE_SELECTION));
         }
+        this.selectSpec = selectSpec;
     }
 
     public boolean isSelected(GImage image) {
@@ -41,7 +37,7 @@ public class SelectionCollection {
     }
 
     public boolean maxSelectedReached() {
-        return imageSet.size() >= maxSelectSize;
+        return imageSet.size() >= selectSpec.maxSelectable;
     }
 
     public int getSize() {
@@ -63,11 +59,7 @@ public class SelectionCollection {
         imageSet.addAll(gImages);
     }
 
-    public ArrayList<Uri> asListOfUri() {
-        ArrayList<Uri> uris = new ArrayList<>();
-        for (GImage item : imageSet) {
-            uris.add(item.getContentUri());
-        }
-        return uris;
+    public ArrayList<GImage> getGImageList() {
+        return new ArrayList<>(imageSet);
     }
 }

@@ -8,11 +8,13 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lqy.mvp.R;
-import com.lqy.mvp.gallery.GalleryActivity;
+import com.lqy.mvp.gallery.TakePhoto;
+import com.lqy.mvp.gallery.TakePhotoImpl;
 import com.lqy.mvp.library.activity.BaseActivity;
 import com.lqy.mvp.library.util.SystemUtils;
 import com.lqy.mvp.library.widget.PullRefreshView;
@@ -21,6 +23,7 @@ import com.lqy.mvp.logic.test.model.http.response.InTheatersResp;
 import com.lqy.mvp.logic.test.presenter.TestPresenter;
 import com.lqy.mvp.logic.test.view.adapter.TestAdapter;
 import com.lqy.mvp.util.ActivityUtils;
+import com.lqy.mvp.util.PicassoUtils;
 import com.zhy.m.permission.MPermissions;
 import com.zhy.m.permission.PermissionDenied;
 import com.zhy.m.permission.PermissionGrant;
@@ -48,12 +51,14 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     PullRefreshView pullRefreshView;
     @BindView(R.id.tv_channel)
     TextView tvChannel;
-    @BindView(R.id.gallery_result)
-    TextView galleryResult;
+    @BindView(R.id.image_test)
+    ImageView imageTest;
+
 
     List<InTheatersResp.SubjectsBean> dataList;
     TestAdapter adapter;
     int pageStart = 0;
+    TakePhoto takePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,22 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     }
 
     void initView() {
+        takePhoto = new TakePhotoImpl(mActivity, new TakePhoto.TakeResultListener() {
+            @Override
+            public void takeSuccess(List<Uri> list) {
+                PicassoUtils.loadNormalImage(imageTest, list.get(0), R.mipmap.ic_launcher);
+            }
+
+            @Override
+            public void takeFail(String msg) {
+
+            }
+
+            @Override
+            public void takeCancel() {
+
+            }
+        });
         dataList = new ArrayList<>();
         adapter = new TestAdapter(this, dataList);
         pullRefreshView.config(new LinearLayoutManager(context), 9);
@@ -104,8 +125,8 @@ public class TestActivity extends BaseActivity implements TestContract.View {
 
     @OnClick(R.id.btn)
     void onPermissionClick() {
-        if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_CONTACTS, 4)) {
-            MPermissions.requestPermissions(mActivity, CONTACT_PERMISSION_REQUEST_CODE, Manifest.permission.READ_CONTACTS);
+        if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, 4)) {
+            MPermissions.requestPermissions(mActivity, CONTACT_PERMISSION_REQUEST_CODE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 
@@ -121,7 +142,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
 
     @OnClick(R.id.btn_gallery)
     void onGalleryClick() {
-        ActivityUtils.jumpToGalleryActivity(mActivity);
+        takePhoto.chooseOnePhotoAndCrop();
     }
 
     @Override
@@ -165,7 +186,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         showToast("授权");
     }
 
-    //
     //授权失败
     @PermissionDenied(CONTACT_PERMISSION_REQUEST_CODE)
     public void onPermissionFail() {
@@ -189,16 +209,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) return;
-        switch (requestCode) {
-            case GalleryActivity.REQUEST_IMAGE:
-                ArrayList<Uri> uriArrayList = data.getParcelableArrayListExtra(GalleryActivity.RESULT_IMAGE_LIST);
-                StringBuilder builder = new StringBuilder();
-                for (Uri uri: uriArrayList) {
-                    builder.append(uri.toString()+"\n");
-                }
-                galleryResult.setText(builder.toString());
-                break;
-        }
+        takePhoto.onActivityResult(requestCode, resultCode, data);
     }
+
 }
