@@ -23,8 +23,10 @@ public final class SelectSpec {
         return selectSpec;
     }
 
-    public int maxSelectable;
+    public int maxSelectable; //最大选择的图片数量
+    public boolean showCamera;  //是否显示拍照按钮
     private void reset() {
         maxSelectable = 0;
+        showCamera = false;
     }
 }

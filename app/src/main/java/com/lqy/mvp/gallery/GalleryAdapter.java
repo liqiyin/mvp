@@ -1,8 +1,8 @@
 package com.lqy.mvp.gallery;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +21,9 @@ import com.lqy.mvp.library.util.SystemUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryAdapter extends BaseRecyclerViewAdapter<GalleryAdapter.ViewHolder> {
+public class GalleryAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
+    private static final int ITEM_CAMERA = 0;
+    private static final int ITEM_PHOTO = 1;
     Context context;
     List<GImage> imageList;
     int mImageResize;
@@ -35,42 +37,57 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<GalleryAdapter.ViewH
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        GalleryGrid galleryGrid = new GalleryGrid(context);
-        galleryGrid.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        return new ViewHolder(galleryGrid, this);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder = null;
+        if (viewType == ITEM_CAMERA) {
+            viewHolder = new CameraHolder(LayoutInflater.from(context).inflate(R.layout.gallery_grid_camera, parent, false), this);
+        } else {
+            GalleryGrid galleryGrid = new GalleryGrid(context);
+            galleryGrid.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            viewHolder = new ViewHolder(galleryGrid, this);
+        }
+
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        GImage gImage = imageList.get(position);
-        holder.galleryGrid.preBindMedia(new GalleryGrid.PreBindInfo(getImageResize(), R.mipmap.ic_launcher, false, holder));
-        holder.galleryGrid.bind(gImage);
-        setCheckStatus(gImage, holder.galleryGrid);
-        holder.galleryGrid.checkView.setOnClickListener(v -> {
-            if (selectionCollection.isSelected(gImage)) {
-                holder.galleryGrid.setChecked(false);
-                selectionCollection.removeGImage(gImage);
-            } else if (!selectionCollection.maxSelectedReached()) {
-                holder.galleryGrid.setChecked(true);
-                selectionCollection.addGImage(gImage);
-            }
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        if (viewHolder instanceof ViewHolder) {
+            ViewHolder holder = (ViewHolder) viewHolder;
+            GImage gImage = imageList.get(selectionCollection.isShowCamera() ? position - 1 : position);
+            holder.galleryGrid.preBindMedia(new GalleryGrid.PreBindInfo(getImageResize(), R.mipmap.ic_launcher, false, holder, selectionCollection.isShowSelectBtn()));
+            holder.galleryGrid.bind(gImage);
+            setCheckStatus(gImage, holder.galleryGrid);
+            holder.galleryGrid.checkView.setOnClickListener(v -> {
+                if (selectionCollection.isSelected(gImage)) {
+                    holder.galleryGrid.setChecked(false);
+                    selectionCollection.removeGImage(gImage);
+                } else if (!selectionCollection.maxSelectedReached()) {
+                    holder.galleryGrid.setChecked(true);
+                    selectionCollection.addGImage(gImage);
+                }
 
-            if (onItemClickListener != null && onItemClickListener instanceof OnGalleryGridItemClickListener) {
-                ((OnGalleryGridItemClickListener) onItemClickListener).onCheckViewClicked(holder.galleryGrid.checkView, selectionCollection.getSize());
-            }
-        });
+                if (onItemClickListener != null && onItemClickListener instanceof OnGalleryGridItemClickListener) {
+                    ((OnGalleryGridItemClickListener) onItemClickListener).onCheckViewClicked(holder.galleryGrid.checkView, selectionCollection.getSize());
+                }
+            });
 
-        holder.galleryGrid.image.setOnClickListener(v -> {
-            if (onItemClickListener != null && onItemClickListener instanceof OnGalleryGridItemClickListener) {
-                ((OnGalleryGridItemClickListener) onItemClickListener).onThumbnailClicked(holder.galleryGrid.image, gImage, selectionCollection);
-            }
-        });
+            holder.galleryGrid.image.setOnClickListener(v -> {
+                if (onItemClickListener != null && onItemClickListener instanceof OnGalleryGridItemClickListener) {
+                    ((OnGalleryGridItemClickListener) onItemClickListener).onThumbnailClicked(holder.galleryGrid.image, gImage, selectionCollection);
+                }
+            });
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return selectionCollection.isShowCamera() && position == 0 ? ITEM_CAMERA : ITEM_PHOTO;
     }
 
     @Override
     public int getItemCount() {
-        return imageList.size();
+        return selectionCollection.isShowCamera() ? imageList.size() + 1 : imageList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,9 +96,16 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<GalleryAdapter.ViewH
         public ViewHolder(View itemView, GalleryAdapter adapter) {
             super(itemView);
             galleryGrid = (GalleryGrid) itemView;
-            itemView.setOnClickListener(v -> adapter.onItemHolderClick(ViewHolder.this));
         }
     }
+
+    static class CameraHolder extends RecyclerView.ViewHolder {
+        public CameraHolder(View itemView, GalleryAdapter adapter) {
+            super(itemView);
+            itemView.setOnClickListener(v -> adapter.onItemHolderClick(CameraHolder.this));
+        }
+    }
+
 
     private int getImageResize() {
         if (mImageResize == 0) {
@@ -108,7 +132,7 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<GalleryAdapter.ViewH
         selectionCollection.overwrite(gImageList);
     }
 
-    public ArrayList<GImage> getSelectUriList() {
+    public ArrayList<GImage> getSelectGImageList() {
         return selectionCollection.getGImageList();
     }
 }

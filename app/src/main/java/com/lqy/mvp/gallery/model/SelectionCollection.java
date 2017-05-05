@@ -48,6 +48,14 @@ public class SelectionCollection {
         imageSet.clear();
     }
 
+    public boolean isShowCamera() {
+        return selectSpec.showCamera;
+    }
+
+    public boolean isShowSelectBtn() {
+        return selectSpec.maxSelectable > 1;
+    }
+
     public Bundle getDataWithBundle() {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(GalleryConfig.STATE_SELECTION, new ArrayList<>(imageSet));

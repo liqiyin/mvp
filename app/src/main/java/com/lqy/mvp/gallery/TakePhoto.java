@@ -11,9 +11,30 @@ public interface TakePhoto {
     int REQUEST_TAKE_PHOTO = 2002;//拍照
 
     void onActivityResult(int requestCode, int resultCode, Intent data);
+
+    /**
+     *
+     * @param photoCount 照片数量
+     * @param isCrop 是否剪切 photoCount为1 且 isCrop为true时生效 该情况使用chooseOnePhotoAndCrop()方法
+     */
     void choosePhoto(int photoCount, boolean isCrop);
+
+    /**
+     * @param size 图片大小
+     * @param inputUri 源图片路径
+     * @param outputUri 剪裁图片路径
+     */
     void cropPhoto(int size, Uri inputUri, Uri outputUri);
+
+    /**
+     * 选择一张图片并剪裁
+     */
     void chooseOnePhotoAndCrop();
+
+    /**
+     * 拍照
+     */
+    void takePhoto();
 
     interface TakeResultListener {
         void takeSuccess(List<Uri> list);

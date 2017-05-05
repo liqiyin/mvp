@@ -43,7 +43,7 @@ import me.drakeet.materialdialog.MaterialDialog;
  * 注意subscribe()和unsubscribe()一定要调用
  */
 public class TestActivity extends BaseActivity implements TestContract.View {
-    private static final int CONTACT_PERMISSION_REQUEST_CODE = 1;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
 
     TestContract.Presenter presenter;
     Unbinder unbinder;
@@ -53,7 +53,6 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     TextView tvChannel;
     @BindView(R.id.image_test)
     ImageView imageTest;
-
 
     List<InTheatersResp.SubjectsBean> dataList;
     TestAdapter adapter;
@@ -66,32 +65,23 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         setContentView(R.layout.activity_test);
         unbinder = ButterKnife.bind(this);
         initView();
+
+        //必须调用的p层逻辑
         presenter = new TestPresenter(this);
         presenter.subscribe();
+
+        //刷新状态
         new Handler().post(() -> {
             pullRefreshView.setRefreshing(true);
             presenter.loadTestContent(pageStart);
         });
+
+        //设置沉浸式状态栏
         setStatusBarColor(R.color.colorPrimaryDark);
     }
 
     void initView() {
-        takePhoto = new TakePhotoImpl(mActivity, new TakePhoto.TakeResultListener() {
-            @Override
-            public void takeSuccess(List<Uri> list) {
-                PicassoUtils.loadNormalImage(imageTest, list.get(0), R.mipmap.ic_launcher);
-            }
-
-            @Override
-            public void takeFail(String msg) {
-
-            }
-
-            @Override
-            public void takeCancel() {
-
-            }
-        });
+        //下拉刷新相关
         dataList = new ArrayList<>();
         adapter = new TestAdapter(this, dataList);
         pullRefreshView.config(new LinearLayoutManager(context), 9);
@@ -120,14 +110,30 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         });
 
         pullRefreshView.setAdapter(adapter);
+
+        //渠道
         tvChannel.setText(SystemUtils.getQudao(mActivity));
+
+        //图片相关
+        takePhoto = new TakePhotoImpl(mActivity, new TakePhoto.TakeResultListener() {
+            @Override
+            public void takeSuccess(List<Uri> list) {
+                PicassoUtils.loadNormalImage(imageTest, list.get(0), R.mipmap.ic_launcher);
+            }
+
+            @Override
+            public void takeFail(String msg) {
+            }
+
+            @Override
+            public void takeCancel() {
+            }
+        });
     }
 
     @OnClick(R.id.btn)
     void onPermissionClick() {
-        if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, 4)) {
-            MPermissions.requestPermissions(mActivity, CONTACT_PERMISSION_REQUEST_CODE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
+        requestPermission();
     }
 
     @OnClick(R.id.btn_patch)
@@ -142,9 +148,15 @@ public class TestActivity extends BaseActivity implements TestContract.View {
 
     @OnClick(R.id.btn_gallery)
     void onGalleryClick() {
-        takePhoto.chooseOnePhotoAndCrop();
+        takePhoto.choosePhoto(1, false);
     }
 
+    @OnClick(R.id.btn_takephoto)
+    void onTakePhotoClick() {
+        takePhoto.takePhoto();
+    }
+
+    //请求数据之后回调
     @Override
     public void displayRequestContent(List<InTheatersResp.SubjectsBean> subjectsBeanList) {
         pullRefreshView.onRequestCompleted();
@@ -174,42 +186,44 @@ public class TestActivity extends BaseActivity implements TestContract.View {
     /**
      * 权限相关
      */
+    private void requestPermission() {
+        if (!MPermissions.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE)) {
+            MPermissions.requestPermissions(mActivity, CAMERA_PERMISSION_REQUEST_CODE, Manifest.permission.CAMERA);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         MPermissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    //授权成功
-    @PermissionGrant(CONTACT_PERMISSION_REQUEST_CODE)
-    public void onPermissionSuccess() {
-        showToast("授权");
+    //相机权限
+    @PermissionGrant(CAMERA_PERMISSION_REQUEST_CODE)
+    public void onCameraSuccess() {
+        showToast("相机授权");
     }
 
-    //授权失败
-    @PermissionDenied(CONTACT_PERMISSION_REQUEST_CODE)
-    public void onPermissionFail() {
-        showToast("拒绝");
+    @PermissionDenied(CAMERA_PERMISSION_REQUEST_CODE)
+    public void onCameraFail() {
+        showToast("相机拒绝");
     }
 
-    //授权失败之后 若为关键权限则再次提示授权
-    @ShowRequestPermissionRationale(CONTACT_PERMISSION_REQUEST_CODE)
-    public void onPermissionExplaination() {
+    @ShowRequestPermissionRationale(CAMERA_PERMISSION_REQUEST_CODE)
+    public void onCameraExplaination() {
         showToast("解释");
         new MaterialDialog(this)
                 .setTitle("提醒")
-                .setMessage("请授予联系人权限")
+                .setMessage("请授予相机权限")
                 .setPositiveButton("确定", v -> SystemUtils.jumpToGrantPermission(mActivity))
-                .setNegativeButton("取消", v -> {
-                    //TODO
-                })
+                .setNegativeButton("取消", v -> {})
                 .show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //交由takephoto处理图片相关的回调
         takePhoto.onActivityResult(requestCode, resultCode, data);
     }
-
 }

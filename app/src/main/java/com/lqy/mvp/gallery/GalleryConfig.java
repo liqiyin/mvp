@@ -16,7 +16,9 @@ public interface GalleryConfig {
     String EXTRA_RESULT_BUNDLE = "extra_result_bundle";
     String EXTRA_RESULT_APPLY = "extra_result_apply";
 
-    String STATE_SELECTION = "state_selection";
-    String SIZE_SELECTION = "size_selection";
+    String IMAGE_RESULT = "image_result";
 
+    String STATE_SELECTION = "state_selection";
+
+    String SMART_TEMP_DIR = "SmartTmp/";
 }

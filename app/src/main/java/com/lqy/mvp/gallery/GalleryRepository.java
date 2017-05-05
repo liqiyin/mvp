@@ -30,11 +30,13 @@ public class GalleryRepository {
             MediaStore.Files.FileColumns._ID,
             MediaStore.MediaColumns.SIZE
     };
+
     private static final String SELECTION_ALL =
             "(" + MediaStore.Files.FileColumns.MIME_TYPE + "=?"
             + " OR " + MediaStore.Files.FileColumns.MIME_TYPE + "=?"
             + " OR " + MediaStore.Files.FileColumns.MIME_TYPE + "=?)"
             + " AND " + MediaStore.MediaColumns.SIZE + ">0";
+
     private static final String[] SELECTION_ALL_ARGS = {
             "image/jpg", "image/jpeg", "image/png"
     };
@@ -71,6 +73,7 @@ public class GalleryRepository {
                         String uriStr = MediaStore.Images.Media.EXTERNAL_CONTENT_URI + File.separator + imageID;
 
                         GImage image = new GImage(imageFile.getName(), imagePath, Uri.parse(uriStr));
+                        //所有相册中 过滤掉10k以下的图片
                         if (imageSize > 10 * 1024) {
                             allImageList.add(image);
                         }

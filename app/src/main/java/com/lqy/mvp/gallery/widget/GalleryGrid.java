@@ -54,7 +54,11 @@ public class GalleryGrid extends SquareFrameLayout {
     }
 
     private void initCheckView() {
-        checkView.setCountable(preBindInfo.mCheckViewCountable);
+        if (preBindInfo.mShowCheckView) {
+            checkView.setCountable(preBindInfo.mCheckViewCountable);
+        } else {
+            checkView.setVisibility(GONE);
+        }
     }
 
     public void setChecked(boolean checked) {
@@ -67,13 +71,15 @@ public class GalleryGrid extends SquareFrameLayout {
         int mPlaceholder;
         boolean mCheckViewCountable;
         RecyclerView.ViewHolder mViewHolder;
+        boolean mShowCheckView;
 
         public PreBindInfo(int resize, int placeholder, boolean checkViewCountable,
-                           RecyclerView.ViewHolder viewHolder) {
+                           RecyclerView.ViewHolder viewHolder, boolean showCheckView) {
             mResize = resize;
             mPlaceholder = placeholder;
             mCheckViewCountable = checkViewCountable;
             mViewHolder = viewHolder;
+            mShowCheckView = showCheckView;
         }
     }
 }
