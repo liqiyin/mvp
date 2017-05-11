@@ -85,7 +85,6 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
                     ArrayList<GImage> list = new ArrayList<>();
                     list.add(item);
                     sendResult(false, GResult.of(list));
-                    finish();
                 } else {
                     Intent intent = new Intent(mActivity, GalleryPreviewActivity.class);
                     intent.putParcelableArrayListExtra(GalleryConfig.EXTRA_ALBUM, (ArrayList<? extends Parcelable>) imageList);
@@ -131,7 +130,6 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
             @Override
             public void takeSuccess(List<Uri> list) {
                 sendResult(false, GResult.ofUriList(list));
-                finish();
             }
 
             @Override
@@ -219,6 +217,7 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
 
     @Override
     public void displayGallery(List<GAlbum> albumList) {
+        if (albumList == null || albumList.size() == 0) return;
         this.albumList.addAll(albumList);
 
         GAlbum album = albumList.get(0);
@@ -235,9 +234,14 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
                 if (resultCode != RESULT_OK) return;
                 Bundle bundle = data.getBundleExtra(GalleryConfig.EXTRA_RESULT_BUNDLE);
                 ArrayList<GImage> stateList = bundle.getParcelableArrayList(GalleryConfig.STATE_SELECTION);
-                adapter.updateSelection(stateList);
-                adapter.notifyDataSetChanged();
-                setSelectedNum(stateList == null ? 0 : stateList.size());
+                boolean isApply = data.getBooleanExtra(GalleryConfig.EXTRA_RESULT_APPLY, false);
+                if (isApply) {
+                    sendResult(false, GResult.of(stateList));
+                } else {
+                    adapter.updateSelection(stateList);
+                    adapter.notifyDataSetChanged();
+                    setSelectedNum(stateList == null ? 0 : stateList.size());
+                }
                 break;
             default:
                 takePhoto.onActivityResult(requestCode, resultCode, data);
@@ -248,19 +252,18 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
     @OnClick(R.id.button_apply)
     void onButtonApply() {
         sendResult(false, GResult.of(adapter.getSelectGImageList()));
-        finish();
     }
 
     @Override
     public void onBackPressed() {
         sendResult(true, null);
-        finish();
     }
 
     public void sendResult(boolean isCancel, GResult gResult) {
         Intent intent = new Intent();
         intent.putExtra(IMAGE_RESULT, gResult);
         setResult(isCancel ? RESULT_CANCELED : RESULT_OK, intent);
+        finish();
     }
 
     private void setSelectedNum(int size) {

@@ -6,5 +6,6 @@
     <it.sephiroth.android.library.imagezoom.ImageViewTouch
         android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher"/>
 </FrameLayout>

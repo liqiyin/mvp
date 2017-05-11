@@ -41,6 +41,9 @@ public class GalleryRepository {
             "image/jpg", "image/jpeg", "image/png"
     };
 
+    /**
+     * 获取系统中的所有图片
+     */
     public static Observable<List<GAlbum>> getImageMap(Context context) {
         return Observable.create(subscriber -> {
             ContentResolver contentResolver = context.getContentResolver();
@@ -55,11 +58,11 @@ public class GalleryRepository {
             HashMap<String, GAlbum> albumHashMap = null;
             List<GImage> allImageList = null;
             if (cursor != null) {
+                albumHashMap = new LinkedHashMap<>();
+                allImageList = new ArrayList<>();
+                GAlbum allAlbum = new GAlbum(allImageList, context.getResources().getString(R.string.all));
+                albumHashMap.put("", allAlbum);
                 if (cursor.moveToLast()) {
-                    albumHashMap = new LinkedHashMap<>();
-                    allImageList = new ArrayList<>();
-                    GAlbum allAlbum = new GAlbum(allImageList, context.getResources().getString(R.string.all));
-                    albumHashMap.put("", allAlbum);
                     while (true) {
                         String imagePath = cursor.getString(0);
                         int imageID = cursor.getInt(1);

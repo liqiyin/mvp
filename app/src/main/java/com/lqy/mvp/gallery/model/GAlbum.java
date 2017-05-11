@@ -7,7 +7,7 @@ import java.util.List;
  * 相册
  */
 
-public class GAlbum {
+public final class GAlbum {
     public List<GImage> imageList;
     public String albumName;
 

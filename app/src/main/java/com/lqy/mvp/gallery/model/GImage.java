@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * 单张图片
  */
 
-public class GImage implements Parcelable {
+public final class GImage implements Parcelable {
     private String imageName;
 
     public String getImagePath() {

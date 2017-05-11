@@ -7,7 +7,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GResult implements Parcelable {
+public final class GResult implements Parcelable {
     public List<GImage> gImageList;
 
     private GResult(List<GImage> gImageList) {

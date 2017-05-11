@@ -38,15 +38,14 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
+        RecyclerView.ViewHolder viewHolder;
         if (viewType == ITEM_CAMERA) {
             viewHolder = new CameraHolder(LayoutInflater.from(context).inflate(R.layout.gallery_grid_camera, parent, false), this);
         } else {
             GalleryGrid galleryGrid = new GalleryGrid(context);
             galleryGrid.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            viewHolder = new ViewHolder(galleryGrid, this);
+            viewHolder = new ViewHolder(galleryGrid);
         }
-
         return viewHolder;
     }
 
@@ -93,7 +92,7 @@ public class GalleryAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHol
     static class ViewHolder extends RecyclerView.ViewHolder {
         public GalleryGrid galleryGrid;
 
-        public ViewHolder(View itemView, GalleryAdapter adapter) {
+        public ViewHolder(View itemView) {
             super(itemView);
             galleryGrid = (GalleryGrid) itemView;
         }

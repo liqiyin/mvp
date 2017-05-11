@@ -28,7 +28,7 @@ public class GallerySpinnerAdapter extends BaseAdapter {
     Context context;
     List<GAlbum> albumList;
 
-    int curPosition = 0;
+    int curPosition = 0; //当前选中的checkbox位置
 
     public GallerySpinnerAdapter(Context context, List<GAlbum> albumList) {
         this.context = context;
@@ -66,7 +66,7 @@ public class GallerySpinnerAdapter extends BaseAdapter {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.gallery_album_item, parent, false);
             holder = new ViewHolder(convertView);

@@ -19,11 +19,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.lqy.mvp.gallery.GalleryConfig.EXTRA_RESULT_BUNDLE;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by slam.li on 2017/5/3.
+ * 图片预览界面
  */
 
 public class GalleryPreviewActivity extends BaseActivity {
@@ -36,23 +37,36 @@ public class GalleryPreviewActivity extends BaseActivity {
 
     SelectionCollection selectionCollection;
     List<GImage> gImageList;
-
     GImage curGImage;
 
+    CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery_preview);
         ButterKnife.bind(this);
-
         initData();
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+    }
+
     private void initData() {
+        compositeDisposable = new CompositeDisposable();
         selectionCollection = new SelectionCollection();
         selectionCollection.onCreate(getIntent().getBundleExtra(GalleryConfig.EXTRA_DEFAULT_BUNDLE), SelectSpec.getInstance());
+    }
+
+    /**
+     * 异步线程
+     */
+    public void insertIOTask(Disposable disposable) {
+        compositeDisposable.add(disposable);
     }
 
     private void initView() {
@@ -65,8 +79,7 @@ public class GalleryPreviewActivity extends BaseActivity {
 
         vpPreview.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
@@ -76,8 +89,7 @@ public class GalleryPreviewActivity extends BaseActivity {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
         setCheckViewStatus();
         setSelectedNum();
@@ -99,7 +111,7 @@ public class GalleryPreviewActivity extends BaseActivity {
 
     @OnClick(R.id.button_back)
     void onBackClick() {
-        sendBackResult();
+        sendBackResult(false);
         finish();
     }
 
@@ -117,13 +129,14 @@ public class GalleryPreviewActivity extends BaseActivity {
 
     @OnClick(R.id.button_apply)
     void onApplyClick() {
-        sendBackResult();
+        sendBackResult(true);
         finish();
     }
 
-    private void sendBackResult() {
+    private void sendBackResult(boolean isApply) {
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_RESULT_BUNDLE, selectionCollection.getDataWithBundle());
+        intent.putExtra(GalleryConfig.EXTRA_RESULT_BUNDLE, selectionCollection.getDataWithBundle());
+        intent.putExtra(GalleryConfig.EXTRA_RESULT_APPLY, isApply);
         setResult(Activity.RESULT_OK, intent);
     }
 }

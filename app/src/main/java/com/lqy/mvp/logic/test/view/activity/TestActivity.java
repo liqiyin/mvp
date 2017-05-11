@@ -148,7 +148,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
 
     @OnClick(R.id.btn_gallery)
     void onGalleryClick() {
-        takePhoto.choosePhoto(1, false);
+        takePhoto.choosePhoto(5, false);
     }
 
     @OnClick(R.id.btn_takephoto)
