@@ -2,6 +2,7 @@ package com.lqy.mvp.gallery;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ public interface TakePhoto {
     int REQUEST_TAKE_PHOTO = 2002;//拍照
 
     void onActivityResult(int requestCode, int resultCode, Intent data);
-
+    void onRestoreInstanceState(Bundle savedInstanceState);
+    void onSaveInstanceState(Bundle outState);
     /**
      *
      * @param photoCount 照片数量

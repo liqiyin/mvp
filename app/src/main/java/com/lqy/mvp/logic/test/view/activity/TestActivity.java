@@ -87,8 +87,7 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         pullRefreshView.config(new LinearLayoutManager(context), 9);
         adapter.setOnItemClickListener(new TestAdapter.OnTestManagerItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
 
             @Override
             public void onIconClick(String title) {
@@ -156,6 +155,11 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         takePhoto.takePhoto();
     }
 
+    @OnClick(R.id.btn_cropphoto)
+    void onCropPhotoClick() {
+        takePhoto.chooseOnePhotoAndCrop();
+    }
+
     //请求数据之后回调
     @Override
     public void displayRequestContent(List<InTheatersResp.SubjectsBean> subjectsBeanList) {
@@ -181,6 +185,18 @@ public class TestActivity extends BaseActivity implements TestContract.View {
         unbinder.unbind();
         presenter.unSubscribe();
         adapter.stopAdAutoScroll();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        takePhoto.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        takePhoto.onRestoreInstanceState(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     /**

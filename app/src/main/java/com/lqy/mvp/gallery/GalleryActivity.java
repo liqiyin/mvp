@@ -72,6 +72,18 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         requestWritePermission();
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        takePhoto.onRestoreInstanceState(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        takePhoto.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
     private void initView() {
         imageList = new ArrayList<>();
         recyclerView.setLayoutManager(new GridLayoutManager(this, GalleryConfig.GRID_COLUMN));

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
@@ -30,9 +31,14 @@ public class TakePhotoImpl implements TakePhoto {
     private Uri cropImageUri; //剪裁图片的输出路径uri
     private Uri takePhotoImageUri;//拍照图片的输出路径uri
 
+    private List<Uri> resultUriList;//拍照结果的uri列表
+
     public TakePhotoImpl(BaseActivity activity, TakeResultListener listener) {
         this.activity = activity;
         this.listener = listener;
+        if (listener == null) {
+            throw new IllegalStateException("TakeResultListener can't be null");
+        }
     }
 
     @Override
@@ -49,7 +55,8 @@ public class TakePhotoImpl implements TakePhoto {
                         if (needCrop) {
                             onCrop(gResult.getCropImage());
                         } else {
-                            listener.takeSuccess(gResult.asImageUriList());
+                            resultUriList = gResult.asImageUriList();
+                            listener.takeSuccess(resultUriList);
                         }
                     } else {
                         listener.takeFail("choose photo fail");
@@ -62,9 +69,7 @@ public class TakePhotoImpl implements TakePhoto {
                 needCrop = false;
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
-                        List<Uri> uriList = new ArrayList<>();
-                        uriList.add(cropImageUri);
-                        listener.takeSuccess(uriList);
+                        handleOnePhotoSuccess(cropImageUri);
                     } else {
                         listener.takeFail("crop photo fail");
                     }
@@ -74,14 +79,47 @@ public class TakePhotoImpl implements TakePhoto {
                 break;
             case REQUEST_TAKE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
-                    List<Uri> uriList = new ArrayList<>();
-                    uriList.add(takePhotoImageUri);
-                    listener.takeSuccess(uriList);
+                    handleOnePhotoSuccess(takePhotoImageUri);
                 } else {
                     listener.takeCancel();
                 }
                 break;
         }
+    }
+
+    /**
+     * 处理获取一张图片成功的情况
+     */
+    private void handleOnePhotoSuccess(Uri uri) {
+        List<Uri> uriList = new ArrayList<>();
+        uriList.add(uri);
+        resultUriList = uriList;
+        listener.takeSuccess(resultUriList);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState == null) return;
+        needCrop = savedInstanceState.getBoolean("needCrop");
+        cropImageUri = savedInstanceState.getParcelable("cropImageUri");
+        takePhotoImageUri = savedInstanceState.getParcelable("takePhotoImageUri");
+        if (cropImageUri != null) {
+            handleOnePhotoSuccess(cropImageUri);
+        }
+        if (takePhotoImageUri != null) {
+            if (needCrop) {
+                onRestoreCrop(takePhotoImageUri);
+            } else {
+                handleOnePhotoSuccess(takePhotoImageUri);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("needCrop", needCrop);
+        outState.putParcelable("cropImageUri", cropImageUri);
+        outState.putParcelable("takePhotoImageUri", takePhotoImageUri);
     }
 
     @Override
@@ -123,8 +161,8 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void takePhoto() {
-        File file = new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_TEMP_DIR + System.currentTimeMillis() + ".jpg");
-        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+        File file = new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_PHOTO_DIR + System.currentTimeMillis() + ".jpg");
+        if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();
         takePhotoImageUri = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 ? FileProvider.getUriForFile(activity, getProviderName(), file)
                 : Uri.fromFile(file);
@@ -136,16 +174,30 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     private void onCrop(GImage gImage) {
-        File file = new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_TEMP_DIR + System.currentTimeMillis() + ".jpg");
-        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+        File file = getCropOutFile();
+        if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();
 
         //读取路径需分类
         Uri imageUri = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 ? FileProvider.getUriForFile(activity, getProviderName(), new File(gImage.getImagePath()))
                 : gImage.getContentUri();
-        //crop的输出路径必须是file型uri 否则需给uri授权
+
         cropImageUri = Uri.fromFile(file);
         cropPhoto(200, imageUri, cropImageUri);
+    }
+
+    /**
+     * 页面恢复时使用
+     */
+    private void onRestoreCrop(Uri inputUri) {
+        File file = getCropOutFile();
+        if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();
+        cropImageUri = Uri.fromFile(file);
+        cropPhoto(200, inputUri, cropImageUri);
+    }
+
+    private File getCropOutFile() {
+        return new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_CROP_DIR + System.currentTimeMillis() + ".jpg");
     }
 
     private String getProviderName() {

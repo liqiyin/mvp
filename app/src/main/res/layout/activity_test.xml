@@ -49,12 +49,20 @@
         android:layout_below="@+id/btn_gallery"
         android:text="拍照" />
 
+    <Button
+        android:id="@+id/btn_cropphoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_takephoto"
+        android:text="截图" />
+
     <TextView
         android:id="@+id/tv_channel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/btn_takephoto" />
+        android:layout_below="@+id/btn_cropphoto" />
 
     <ImageView
         android:id="@+id/image_test"
