@@ -19,6 +19,6 @@ public interface GalleryConfig {
 
     String STATE_SELECTION = "state_selection";
 
-    String SMART_PHOTO_DIR = "SmartPhoto/";
-    String SMART_CROP_DIR = "SmartCrop/";
+    String SMART_PHOTO_DIR = "SmartPhoto";
+    String SMART_CROP_DIR = "SmartCrop";
 }

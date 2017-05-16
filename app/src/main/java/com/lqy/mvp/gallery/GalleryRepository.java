@@ -72,6 +72,13 @@ public class GalleryRepository {
                         File parentFile = imageFile.getParentFile();
                         String parentPath = parentFile.getAbsolutePath();
                         String parentName = parentFile.getName();
+                        if (parentName.equals(GalleryConfig.SMART_CROP_DIR)) {
+                            if (!cursor.moveToPrevious()) {
+                                break;
+                            } else {
+                                continue; //过滤剪裁图片
+                            }
+                        }
 
                         String uriStr = MediaStore.Images.Media.EXTERNAL_CONTENT_URI + File.separator + imageID;
 

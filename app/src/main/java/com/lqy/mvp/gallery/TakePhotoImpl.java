@@ -66,7 +66,6 @@ public class TakePhotoImpl implements TakePhoto {
                 }
                 break;
             case REQUEST_CROP:
-                needCrop = false;
                 if (resultCode == Activity.RESULT_OK) {
                     if (data != null) {
                         handleOnePhotoSuccess(cropImageUri);
@@ -139,6 +138,7 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void cropPhoto(int size, Uri inputUri, Uri outputUri) {
+        needCrop = false;
         Intent intent = new Intent();
         intent.setAction("com.android.camera.action.CROP");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -161,7 +161,7 @@ public class TakePhotoImpl implements TakePhoto {
 
     @Override
     public void takePhoto() {
-        File file = new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_PHOTO_DIR + System.currentTimeMillis() + ".jpg");
+        File file = new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_PHOTO_DIR + File.separator + System.currentTimeMillis() + ".jpg");
         if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();
         takePhotoImageUri = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 ? FileProvider.getUriForFile(activity, getProviderName(), file)
@@ -197,7 +197,7 @@ public class TakePhotoImpl implements TakePhoto {
     }
 
     private File getCropOutFile() {
-        return new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_CROP_DIR + System.currentTimeMillis() + ".jpg");
+        return new File(Environment.getExternalStorageDirectory(), File.separator + GalleryConfig.SMART_CROP_DIR + File.separator + System.currentTimeMillis() + ".jpg");
     }
 
     private String getProviderName() {
