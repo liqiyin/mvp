@@ -76,7 +76,10 @@ public class GallerySpinnerAdapter extends BaseAdapter {
         }
         GAlbum album = albumList.get(position);
         int resize = CommonUtils.dp2px(context, 60);
-        PicassoUtils.loadSquareThumbnailInList(resize, holder.imageAlbum, album.getImageList().size() == 0 ? null : album.getImageList().get(0).getContentUri(), R.mipmap.ic_launcher_round);
+        PicassoUtils.loadSquareThumbnailInList(resize,
+                holder.imageAlbum,
+                album.getImageList().size() == 0 ? null : album.getImageList().get(0).getContentUri(),
+                R.mipmap.ic_launcher_round);
         holder.textAlbum.setText(album.getAlbumName());
         holder.checkView.setChecked(position == curPosition);
 

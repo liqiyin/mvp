@@ -36,7 +36,7 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".api.InitialIntentService"
+            android:name=".InitialIntentService"
             android:exported="false" />
 
         <activity

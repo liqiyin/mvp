@@ -13,7 +13,6 @@ import android.support.multidex.MultiDex;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.lqy.mvp.api.InitialIntentService;
 import com.lqy.mvp.library.activity.BaseActivity;
 import com.lqy.mvp.library.util.SystemUtils;
 import com.squareup.leakcanary.LeakCanary;

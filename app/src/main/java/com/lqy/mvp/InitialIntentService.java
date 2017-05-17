@@ -1,8 +1,10 @@
-package com.lqy.mvp.api;
+package com.lqy.mvp;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+
+import com.lqy.mvp.api.ApiClient;
 
 /**
  * Created by slam.li on 2017/3/24.
