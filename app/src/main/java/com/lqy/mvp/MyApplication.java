@@ -32,11 +32,13 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         myApplicationInstance = this;
-        initStrictMode();
-        initLeakCanary();
-        initFresco();
-        initApiService();
-        initBugly();
+        if (checkMainProcess()) {
+            initStrictMode();
+            initLeakCanary();
+            initFresco();
+            initApiService();
+            initBugly();
+        }
     }
 
     /**
@@ -104,6 +106,15 @@ public class MyApplication extends Application {
         MultiDex.install(base);
         // 安装tinker
         Beta.installTinker();
+    }
+
+
+    /**
+     * 项目中集成了推送服务 会开启多个进程 所以application的onCreate方法会走若干次 仅在主进程中初始化需要用到的东西
+     */
+    private boolean checkMainProcess() {
+        String processName = SystemUtils.getCurProcessName(getApplicationContext());
+        return "com.lb.duoduo".equals(processName);
     }
 
     /**

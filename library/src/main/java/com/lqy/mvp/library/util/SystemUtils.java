@@ -1,5 +1,6 @@
 package com.lqy.mvp.library.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -36,8 +37,7 @@ public class SystemUtils {
     public static String getIMSI(Context context) {
         TelephonyManager telephonyManager = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        String IMSI = telephonyManager.getSubscriberId();
-        return IMSI;
+        return telephonyManager.getSubscriberId();
     }
 
     /**
@@ -53,8 +53,7 @@ public class SystemUtils {
                 Settings.Secure.ANDROID_ID) + "";
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
-        return deviceId;
+        return deviceUuid.toString();
     }
 
     /**
@@ -120,7 +119,7 @@ public class SystemUtils {
     public static boolean isPackageExisted(Context context, String targetPackage) {
         PackageManager pm = context.getPackageManager();
         try {
-            PackageInfo info = pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA);
+            pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
@@ -242,4 +241,17 @@ public class SystemUtils {
         return point.y;
     }
 
+    /**
+     * 获得当前进程的名字的方法
+     */
+    public static String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
+        }
+        return "";
+    }
 }
